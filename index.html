@@ -7,13 +7,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #2a2a2a;
+    --bg: #efa52b;
     --card-bg: #181818;
     --card-bg2: #141414;
     --white: #f0ece4;
-    --neon-red: #ff2244;
-    --neon-gold: #ffd700;
-    --gold: #e8a820;
+    --neon-red: #c22b27;
+    --neon-gold: #efa52b;
+    --gold: #efa52b;
+    --brand-red: #c22b27;
+    --brand-yellow: #efa52b;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
   html, body { height:100%; }
@@ -25,17 +27,14 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    background-image:
-      radial-gradient(circle at 5% 95%, #c0392b12 0%, transparent 40%),
-      radial-gradient(circle at 95% 5%, #e8a8200d 0%, transparent 40%);
   }
 
-  /* animated grid overlay */
+  /* subtle grid overlay on yellow bg */
   body::before {
     content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
     background-image:
-      linear-gradient(rgba(232,168,32,0.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(232,168,32,0.025) 1px, transparent 1px);
+      linear-gradient(rgba(1,1,1,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(1,1,1,0.04) 1px, transparent 1px);
     background-size: 60px 60px;
     animation: gridScroll 20s linear infinite;
   }
@@ -45,35 +44,68 @@
   #pizzaCanvas  { position:fixed; inset:0; z-index:1; pointer-events:none; }
   #sparksCanvas { position:fixed; inset:0; z-index:2; pointer-events:none; }
 
-  /* ── NEON TITLE ── */
+  /* ── SCROLLING TICKER TITLE ── */
   .title-section {
-    position:relative; z-index:10;
-    text-align:center;
-    padding: 14px 20px 10px;
+    position: relative; z-index: 10;
     flex-shrink: 0;
+    background: #010101;
+    border-top: 3px solid var(--brand-red);
+    border-bottom: 3px solid var(--brand-red);
+    overflow: hidden;
+    height: 76px;
+    display: flex;
+    align-items: center;
   }
-  .neon-box {
-    display:inline-block;
-    padding: 7px 52px 5px;
-    border: 2px solid var(--neon-red);
-    border-radius: 4px;
-    box-shadow: 0 0 8px var(--neon-red), 0 0 24px var(--neon-red), inset 0 0 10px #ff224418;
+  .ticker-track {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    animation: tickerScroll 55s linear infinite;
+    will-change: transform;
   }
-  .neon-title {
+  @keyframes tickerScroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .ticker-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 24px;
+    padding: 0 32px;
+  }
+  .ticker-logo {
+    width: 58px;
+    height: 58px;
+    object-fit: cover;
+    flex-shrink: 0;
+    border-radius: 50%;
+    filter: drop-shadow(0 0 6px rgba(194,43,39,0.5));
+  }
+  .ticker-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(2.4rem, 5vw, 4.8rem);
-    letter-spacing: .22em;
+    font-size: clamp(2rem, 4.5vw, 4.2rem);
+    letter-spacing: .28em;
     color: #fff;
     line-height: 1;
-    text-shadow: 0 0 7px #fff, 0 0 14px #fff, 0 0 30px var(--neon-red), 0 0 60px var(--neon-red), 0 0 100px var(--neon-red);
+    text-shadow:
+      0 0 6px #fff,
+      0 0 20px var(--brand-red),
+      0 0 50px var(--brand-red);
     animation: neonFlicker 5s infinite;
+  }
+  .ticker-dot {
+    width: 10px; height: 10px;
+    background: var(--brand-yellow);
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 8px var(--brand-yellow);
   }
   @keyframes neonFlicker {
     0%,19%,21%,23%,25%,54%,56%,100% {
-      text-shadow: 0 0 7px #fff, 0 0 14px #fff, 0 0 30px var(--neon-red), 0 0 60px var(--neon-red), 0 0 100px var(--neon-red);
+      text-shadow: 0 0 6px #fff, 0 0 20px var(--brand-red), 0 0 50px var(--brand-red);
       color: #fff;
     }
-    20%,24%,55% { text-shadow:none; color:#ff224455; }
+    20%,24%,55% { text-shadow:none; color:#c22b2755; }
   }
 
   /* ── Grid ── */
@@ -97,31 +129,54 @@
     background: linear-gradient(145deg, var(--card-bg), var(--card-bg2));
     border: 1px solid #ffffff0d;
     border-radius: 7px;
-    padding: 10px 0 0 12px;
+    padding: 6px 0 0 8px;
     overflow: hidden;
-    transition: transform .22s, border-color .22s, box-shadow .22s;
+    transition: transform .28s cubic-bezier(.34,1.56,.64,1), border-color .25s, box-shadow .25s, background .25s;
     animation: fadeUp .5s ease both;
     display: flex;
     flex-direction: column;
     backdrop-filter: blur(2px);
   }
   .card:hover {
-    transform: translateY(-3px);
-    border-color: var(--neon-red);
-    box-shadow: 0 6px 22px #ff224430, inset 0 0 14px #ff224408;
+    transform: translateY(-4px) scale(1.012);
+    border-color: var(--brand-red);
+    background: linear-gradient(145deg, #222, #1a1a1a);
+    box-shadow:
+      0 8px 28px #c22b2740,
+      0 2px 8px #00000060,
+      inset 0 0 20px #c22b2710;
   }
+  /* left red accent bar */
   .card::after {
-    content:''; position:absolute; left:0; top:15%; bottom:15%;
-    width:3px; background:linear-gradient(180deg,transparent,var(--neon-red),transparent);
-    opacity:0; transition:opacity .22s; border-radius:0 2px 2px 0;
+    content:''; position:absolute; left:0; top:10%; bottom:10%;
+    width:3px;
+    background: linear-gradient(180deg, transparent, var(--brand-red), var(--brand-yellow), var(--brand-red), transparent);
+    opacity:0; transition:opacity .25s; border-radius:0 2px 2px 0;
   }
   .card:hover::after { opacity:1; }
+  /* shimmer sweep on hover */
   .card::before {
-    content:''; position:absolute; top:0; left:5%; right:5%; height:1px;
-    background:linear-gradient(90deg,transparent,var(--neon-red),transparent);
-    opacity:0; transition:opacity .3s;
+    content:''; position:absolute;
+    top:0; left:-100%; width:60%; height:100%;
+    background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.06) 50%, transparent 60%);
+    transition: left .55s ease;
+    pointer-events: none;
+    z-index: 3;
   }
-  .card:hover::before { opacity:1; }
+  .card:hover::before { left: 150%; }
+
+  /* number glows brighter on hover */
+  .card:hover .card-number {
+    text-shadow: 0 0 12px var(--brand-red), 0 0 24px #c22b2780;
+  }
+  /* price glows on hover */
+  .card:hover .card-price {
+    text-shadow: 0 0 12px var(--brand-yellow), 0 0 24px #efa52b80;
+  }
+  /* name brightens */
+  .card:hover .card-name {
+    color: #ffffff;
+  }
 
   /* ── Card inner layout: left content + right photo ── */
   .card-inner {
@@ -132,22 +187,22 @@
     z-index: 2;
   }
 
-  /* Left content: 2/3 width */
+  /* Left content: 76% width */
   .card-content {
-    flex: 0 0 66%;
-    max-width: 66%;
+    flex: 0 0 76%;
+    max-width: 76%;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
     min-width: 0;
   }
 
-  /* Right photo: 1/3 width, fills card fully edge to edge */
+  /* Right photo: 24% width */
   .card-photo-wrap {
-    flex: 0 0 34%;
+    flex: 0 0 24%;
     position: relative;
     overflow: hidden;
-    margin: -10px 0 0 0;
+    margin: -6px 0 0 0;
     border-radius: 0 7px 7px 0;
   }
   .card-photo {
@@ -173,17 +228,17 @@
   }
   .card-number {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.56rem;
+    font-size: clamp(0.85rem, 1.1vw, 1.15rem);
     letter-spacing: .06em;
-    color: var(--neon-red);
-    opacity: .9;
+    color: var(--brand-red);
+    opacity: 1;
     line-height: 1;
-    text-shadow: 0 0 8px #ff224460;
+    text-shadow: 0 0 8px #c22b2740;
     flex-shrink: 0;
   }
   .card-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.38rem;
+    font-size: clamp(0.8rem, 1.05vw, 1.1rem);
     letter-spacing: .05em;
     color: var(--white);
     line-height: 1.1;
@@ -195,11 +250,11 @@
   }
   .card-price {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.38rem;
+    font-size: clamp(0.8rem, 1.05vw, 1.1rem);
     letter-spacing: .04em;
-    color: var(--neon-gold);
+    color: var(--brand-yellow);
     white-space: nowrap;
-    text-shadow: 0 0 8px #ffd70055;
+    text-shadow: 0 0 8px #efa52b55;
     flex-shrink: 0;
   }
   .dot {
@@ -217,10 +272,10 @@
     flex-wrap: wrap;
   }
   .tag {
-    font-size: .62rem;
-    letter-spacing: .07em;
+    font-size: .55rem;
+    letter-spacing: .06em;
     text-transform: uppercase;
-    padding: 2px 7px;
+    padding: 1px 5px;
     border-radius: 2px;
     font-weight: 700;
     white-space: nowrap;
@@ -231,11 +286,11 @@
 
   /* ── Row 3: ingredients ── */
   .card-ingredients {
-    font-size: .77rem;
-    letter-spacing: .05em;
+    font-size: clamp(0.6rem, 0.72vw, 0.72rem);
+    letter-spacing: .04em;
     text-transform: uppercase;
     color: rgba(255,255,255,0.88);
-    line-height: 1.5;
+    line-height: 1.4;
     white-space: normal;
     word-break: break-word;
     flex: 1;
@@ -259,8 +314,8 @@
 <canvas id="sparksCanvas"></canvas>
 
 <div class="title-section">
-  <div class="neon-box">
-    <div class="neon-title">PIZZAS</div>
+  <div class="ticker-track" id="tickerTrack">
+    <!-- content injected by JS so we can duplicate it for seamless loop -->
   </div>
 </div>
 
@@ -270,7 +325,22 @@
 
 <script>
 /* ═══════════════════════════════
-   FLYING PIZZA EMOJIS
+   TICKER – inject content & loop
+═══════════════════════════════ */
+const LOGO_SRC = 'data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAEsASwDASIAAhEBAxEB/8QAHQABAAICAwEBAAAAAAAAAAAAAAcIBgkBBAUDAv/EAFMQAAEDAwEGAgUGCAcNCQAAAAEAAgMEBQYRBwgSITFBE1EiQmFxgRQyUnKRoQkVQ2KxssHRFiMzU4KSohcYNlRWc4OWwsPS0/AkNFV0dYSTs+H/xAAbAQEAAgMBAQAAAAAAAAAAAAAABAYDBQcCAf/EADgRAQABAwICBggEBgMBAAAAAAABAgMEBREhMQYSQVFhcRMyQoGRobHRFDPB8BUiQ1JT4RYjsvH/2gAMAwEAAhEDEQA/AKZIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIu7YrTcr7eKSz2eimrrhWSiKnp4W8T5HHoAP+tFeLYpuf41aaCC57SXuvV0e0Odb4ZXMpYD9Eubo6Rw89Q3toepCiCLbVQ7MNm9FStpaXAcYjiaNOH8VQnX3kt1PvKwfaNuz7J8wpZvBx+LH69w9CrtIEHCfbEP4sjz9HX2hBrNRSPt32PZPskyFtDeGirttSSaG5QtIiqAOxHqvHdp+BI5qOEBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBdyyWu43u70totNHNW11XKIoIW8T5HHoAF0196CsrLfWR1lBVT0lTEeKOaCQsew+YcOYQbHt1nYJbtlVnbeLwyGty6si0qJx6TKRh6wxH9Z3f3Kc1rHwveV2xYvwRx5XLdqdpBMN1jFSHewvP8Zp7nBTdhe+608EWZYURz9OotVRry9kUn/GguUiiLC95HY7lHAyHLYLXUOOngXRhpSP6bvQ+xxUrUNZSV9MyqoaqCqgfzbLDIHtd7iORQePtAw/H87xWrxrJaFtXQVLeY6PjcPmvY71XDsf0gkLWlvA7Hr/sjys0FeHVdoqXOdbbi1mjJ2D1XfRkHdvxGoK2mLH9oOHY/nmK1eNZLQtq6Cpb7nxO9V7Heq4dj+zUINQ6KS94DY/kGyTKzb68r6u0VLnOttxazRk7B6p+jIOWrfiORCjRAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQF9KeGWonZBBG6SV7g1rWjUk+S+amDA8UistO2sqg2Wvkb16iIHsPb5n/ox8jIpsU7zzbfR9Iu6ne6lPCmOc90feexiUuzm9NpWSxz0r5S3V8RcQWnyB6H7l4Fyx+9W7U1dtqGNHMvDeJv2jUKd0Wso1G5HrRuvGR0Mwq4/wCqqaZ+Mfv3q6Ip5uNhs9x1NZbqeRx6v4eF39Yc1jVx2b2ubV1FV1FK7ydpI39h+9S6NRt1etGyv5XQ3Nt8bVUVx8J+fD5orXsY1lGSYzU/Kcdv90tEuocXUdU+LiI8+EjX4r17js9vtNq6m8Csb+Y/hd9jtP0rG6+23Cgdw1tFUU/kZIyAfce6mUXrdfqyruTp2Xi/nW5j3cPjyTnhm9vtcsPDHcqy3ZFACNW19KGvA8g+PhOvtdqpuwzfXxGt4Ysrxa6WiQ6Ay0cjaqL3nXgcPgHKiaLIhNnNfm2w3bZilTi9TlFnr6arAAp6iX5NUxyeq+Nsoa4PB6EA+R1INDO/bILhslzcs51tRb31FNaKh3u8Kgkk4B7eRV8Y4tYC1oDQNAB5Cq7b8uFdCqDQfwJ8Z/s4t9bXe6qqve9huT3jEr5Dd7NVOhnjI42a+hK3ux47tP/AOjQq8WGX6lyjFrffqMcMVZCJODXUsd0c0+0OBHwVA1cndmgnh2PWrxmuaJJJ3xg/RMrtPt5lVzpjjWvQUX9v5t9vONp+zb6Ber9LVa7Nt0lKhO0L/D7If8A1Sp/+1yvsqE7QwRn2Qggg/jSp6/51yg9DPzrvlH1SOkP5dHnLwkRe1hGL3vM8oocbx6ifV3Gtk4I2Do0d3OPZoGpJ7ALoKrPrs/w/IM7ymlxvGaB9ZX1J5AcmxtHV73dGtHcn9JAWyPd42JY7sjsOkAZcMgqmAV1ycz0nd/DjHqxg9up6nsB2t3zY/YdkeJNt9EGVd4qWtdcriW6Onf9Fv0Y289G/E8yVJiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgLMtmu1DOtnVW6bEchqaCOR3FLTHSSCU9NXRu1aT7dNfasNRBZ6h31dpENK2Oqx3GKmVo08XwpmcXtIEmn2aLBto28xtZzWkloJr1FZqCYEPp7TEYOIaaaF5Jk08xxaHyUNIg5JJOpOpXCIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIg//2Q==';
+function buildTickerItem() {
+  return `<span class="ticker-item">
+    <img class="ticker-logo" src="${LOGO_SRC}" alt="">
+    <span class="ticker-title">PIZZA</span>
+  </span>`;
+}
+const track = document.getElementById('tickerTrack');
+let html = '';
+for (let i = 0; i < 12; i++) html += buildTickerItem();
+track.innerHTML = html;
+
+/* ═══════════════════════════════
+   FLYING LOGOS
 ═══════════════════════════════ */
 const pc  = document.getElementById('pizzaCanvas');
 const pct = pc.getContext('2d');
@@ -284,19 +354,21 @@ function resize() {
 resize();
 window.addEventListener('resize', resize);
 
-const PIZZA_EMOJIS = ['🍕','🍕','🍕','🍕','🍕','🧀','🌿','🔥','🫙'];
-class FlyingPizza {
+// pre-load logo image
+const logoImg = new Image();
+logoImg.src = LOGO_SRC;
+
+class FlyingLogo {
   constructor(init) { this.spawn(init); }
   spawn(init) {
-    this.size  = 18 + Math.random() * 44;
+    this.size  = 22 + Math.random() * 50;
     this.x     = Math.random() * (W||1400);
     this.y     = init ? Math.random() * (H||900) : (H||900) + this.size;
-    this.emoji = PIZZA_EMOJIS[Math.floor(Math.random()*PIZZA_EMOJIS.length)];
-    this.speed = .18 + Math.random() * .36;
-    this.vx    = (Math.random() - .5) * .5;
+    this.speed = .14 + Math.random() * .32;
+    this.vx    = (Math.random() - .5) * .45;
     this.rot   = Math.random() * Math.PI * 2;
-    this.vrot  = (Math.random() - .5) * .012;
-    this.alpha = .05 + Math.random() * .11;
+    this.vrot  = (Math.random() - .5) * .010;
+    this.alpha = .06 + Math.random() * .12;
     this.life  = 0;
     this.max   = (H||900) / this.speed * 1.4;
   }
@@ -305,30 +377,30 @@ class FlyingPizza {
     if (this.y < -this.size * 2) this.spawn(false);
   }
   draw(ctx) {
+    if (!logoImg.complete) return;
     const prog = this.life / this.max;
     const fade = prog < .08 ? prog/.08 : prog > .85 ? 1-(prog-.85)/.15 : 1;
     ctx.save();
     ctx.globalAlpha = this.alpha * fade;
-    ctx.translate(this.x, this.y); ctx.rotate(this.rot);
-    ctx.font = `${this.size}px serif`;
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText(this.emoji, 0, 0);
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rot);
+    ctx.drawImage(logoImg, -this.size/2, -this.size/2, this.size, this.size);
     ctx.restore();
   }
 }
-const pizzas3d = [];
-for (let i=0;i<22;i++) pizzas3d.push(new FlyingPizza(true));
-function animPizza() {
+const flyingLogos = [];
+for (let i=0;i<20;i++) flyingLogos.push(new FlyingLogo(true));
+function animLogo() {
   pct.clearRect(0,0,W,H);
-  pizzas3d.forEach(p=>{ p.update(); p.draw(pct); });
-  requestAnimationFrame(animPizza);
+  flyingLogos.forEach(p=>{ p.update(); p.draw(pct); });
+  requestAnimationFrame(animLogo);
 }
-animPizza();
+animLogo();
 
 /* ═══════════════════════════════
-   SPARKS
+   SPARKS — brand colors
 ═══════════════════════════════ */
-const PCOLS=['#ff2244','#ffd700','#ff6644','#ff4466','#ffbb00'];
+const PCOLS=['#c22b27','#efa52b','#d44a20','#e83030','#f5b800'];
 class Spark {
   constructor(init) { this.spawn(init); }
   spawn(init) {
@@ -382,7 +454,7 @@ const pizzas=[
   {n:1,  name:"Margarita",        price:"8.9€",  ing:"Tomate, Mozzarella",                                                         tags:["veg"],  photo:"https://upload.wikimedia.org/wikipedia/commons/a/a3/Eq_it-na_pizza-margherita_sep2005_sml.jpg"},
   {n:2,  name:"Margarita Búfala", price:"10.5€", ing:"Tomate, Mozzarella de Búfala, Albahaca",                                     tags:["veg"],  photo:null},
   {n:3,  name:"Peperoni",         price:"9.9€",  ing:"Tomate, Mozzarella, Peperoni",                                               tags:[],       photo:null},
-  {n:4,  name:"Prosciutto",       price:"9.9€",  ing:"Tomate, Mozzarella, Jamón Cocido",                                           tags:[],       photo:"https://lh3.googleusercontent.com/d/1mvVqVycWkMQzFAOZZ38XMb-iwCF3zkMB"},
+  {n:4,  name:"Prosciutto",       price:"9.9€",  ing:"Tomate, Mozzarella, Jamón Cocido",                                           tags:[],       photo:null},
   {n:5,  name:"Carbonara",        price:"10.9€", ing:"Nata, Huevo, Bacon, Cebolla",                                                tags:[],       photo:null},
   {n:6,  name:"Barbacoa",         price:"12.9€", ing:"Tomate, Mozzarella, Pollo, Bacon, Champiñones, Salsa Barbacoa",              tags:[],       photo:null},
   {n:7,  name:"4 Quesos",         price:"11.9€", ing:"Tomate, Mozzarella, Queso Azul, Queso de Cabra, Parmesano",                  tags:["veg"],  photo:null},
@@ -437,6 +509,119 @@ pizzas.forEach(p => {
       </div>
     </div>`;
 });
+</script>
+
+<script>
+/* ═══════════════════════════════
+   ANTI-IDLE / ANTI-SLEEP
+═══════════════════════════════ */
+setInterval(() => {
+  document.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }));
+}, 30000);
+
+async function requestWakeLock() {
+  if ('wakeLock' in navigator) {
+    try { await navigator.wakeLock.request('screen'); } catch (e) {}
+  }
+}
+requestWakeLock();
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') requestWakeLock();
+});
+
+window.addEventListener('beforeunload', e => {
+  e.preventDefault();
+  e.returnValue = '';
+});
+</script>
+
+<script>
+/* ═══════════════════════════════
+   RANDOM CARD FLICKER
+═══════════════════════════════ */
+(function() {
+  setTimeout(() => {
+    const cards = Array.from(document.querySelectorAll('.card'));
+
+    function flickerCard(card) {
+      if (card.dataset.flickering === '1') return;
+      card.dataset.flickering = '1';
+
+      const effectType = Math.floor(Math.random() * 3);
+
+      if (effectType === 0) {
+        card.style.transition = 'transform .3s cubic-bezier(.34,1.56,.64,1), border-color .2s, box-shadow .2s, background .2s';
+        card.style.transform = 'translateY(-4px) scale(1.012)';
+        card.style.borderColor = '#c22b27';
+        card.style.boxShadow = '0 8px 28px #c22b2750, 0 2px 8px #00000060, inset 0 0 20px #c22b2718';
+        card.style.background = 'linear-gradient(145deg, #222, #1a1a1a)';
+
+        const num = card.querySelector('.card-number');
+        const price = card.querySelector('.card-price');
+        const name = card.querySelector('.card-name');
+        if (num) num.style.textShadow = '0 0 12px #c22b27, 0 0 24px #c22b2780';
+        if (price) price.style.textShadow = '0 0 12px #efa52b, 0 0 24px #efa52b80';
+        if (name) name.style.color = '#ffffff';
+
+        const duration = 800 + Math.random() * 600;
+        setTimeout(() => {
+          card.style.transform = '';
+          card.style.borderColor = '';
+          card.style.boxShadow = '';
+          card.style.background = '';
+          if (num) num.style.textShadow = '';
+          if (price) price.style.textShadow = '';
+          if (name) name.style.color = '';
+          setTimeout(() => { card.dataset.flickering = '0'; }, 400);
+        }, duration);
+
+      } else if (effectType === 1) {
+        card.style.transition = 'border-color .15s, box-shadow .15s';
+        card.style.borderColor = '#efa52b';
+        card.style.boxShadow = '0 0 18px #efa52b55, inset 0 0 12px #efa52b10';
+
+        const duration = 500 + Math.random() * 400;
+        setTimeout(() => {
+          card.style.borderColor = '';
+          card.style.boxShadow = '';
+          setTimeout(() => { card.dataset.flickering = '0'; }, 300);
+        }, duration);
+
+      } else {
+        card.style.transition = 'box-shadow .08s, border-color .08s';
+        card.style.borderColor = '#c22b27';
+        card.style.boxShadow = '0 0 22px #c22b2760';
+        setTimeout(() => {
+          card.style.borderColor = '';
+          card.style.boxShadow = '';
+          setTimeout(() => {
+            card.style.borderColor = '#c22b27';
+            card.style.boxShadow = '0 0 22px #c22b2760';
+            setTimeout(() => {
+              card.style.borderColor = '';
+              card.style.boxShadow = '';
+              setTimeout(() => { card.dataset.flickering = '0'; }, 200);
+            }, 120);
+          }, 100);
+        }, 120);
+      }
+    }
+
+    function scheduleNext() {
+      const count = 1 + Math.floor(Math.random() * 2);
+      const shuffled = [...cards].sort(() => Math.random() - .5);
+      for (let i = 0; i < count; i++) {
+        const delay = i * (150 + Math.random() * 200);
+        setTimeout(() => flickerCard(shuffled[i]), delay);
+      }
+      const nextIn = 1200 + Math.random() * 2300;
+      setTimeout(scheduleNext, nextIn);
+    }
+
+    setTimeout(scheduleNext, 2000);
+  }, 1000);
+})();
 </script>
 </body>
 </html>
