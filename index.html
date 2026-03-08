@@ -119,7 +119,7 @@
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(5, 1fr);
-    gap: 8px;
+    gap: 4px;
     height: 100%;
   }
 
@@ -129,7 +129,7 @@
     background: linear-gradient(145deg, var(--card-bg), var(--card-bg2));
     border: 1px solid #ffffff0d;
     border-radius: 7px;
-    padding: 6px 0 0 8px;
+    padding: 10px 0 8px 12px;
     overflow: hidden;
     transition: transform .28s cubic-bezier(.34,1.56,.64,1), border-color .25s, box-shadow .25s, background .25s;
     animation: fadeUp .5s ease both;
@@ -140,69 +140,74 @@
   .card:hover {
     transform: translateY(-4px) scale(1.012);
     border-color: var(--brand-red);
-    background: linear-gradient(145deg, #222, #1a1a1a);
-    box-shadow:
-      0 8px 28px #c22b2740,
-      0 2px 8px #00000060,
-      inset 0 0 20px #c22b2710;
+    box-shadow: 0 8px 28px #c22b2740, 0 2px 8px #00000060, inset 0 0 20px #c22b2710;
   }
-  /* left red accent bar */
+  /* left red accent bar — always visible */
   .card::after {
     content:''; position:absolute; left:0; top:10%; bottom:10%;
     width:3px;
     background: linear-gradient(180deg, transparent, var(--brand-red), var(--brand-yellow), var(--brand-red), transparent);
-    opacity:0; transition:opacity .25s; border-radius:0 2px 2px 0;
+    opacity:1;
+    border-radius:0 2px 2px 0;
   }
-  .card:hover::after { opacity:1; }
-  /* shimmer sweep on hover */
+
+  /* shimmer sweep */
   .card::before {
     content:''; position:absolute;
     top:0; left:-100%; width:60%; height:100%;
-    background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.06) 50%, transparent 60%);
-    transition: left .55s ease;
+    background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.07) 50%, transparent 60%);
+    transition: left 1.2s ease;
     pointer-events: none;
     z-index: 3;
   }
+  .card.no-transition::before { transition: none !important; }
   .card:hover::before { left: 150%; }
+  .card.js-flash::before { left: 150%; }
 
-  /* number glows brighter on hover */
-  .card:hover .card-number {
-    text-shadow: 0 0 12px var(--brand-red), 0 0 24px #c22b2780;
+  /* JS flash — subtle inner glow only, no transform */
+  .card.js-flash {
+    box-shadow: inset 0 0 30px #c22b2722, inset 0 0 8px #c22b270f;
+    border-color: #c22b2755 !important;
+    transition: box-shadow .2s, border-color .2s !important;
   }
-  /* price glows on hover */
-  .card:hover .card-price {
-    text-shadow: 0 0 12px var(--brand-yellow), 0 0 24px #efa52b80;
-  }
-  /* name brightens */
-  .card:hover .card-name {
-    color: #ffffff;
+  .card-g4.js-flash {
+    box-shadow: inset 0 0 30px #efa52b22, inset 0 0 8px #efa52b0f;
+    border-color: #efa52b55 !important;
   }
 
-  /* ── Card inner layout: left content + right photo ── */
+  /* name brightens on hover */
+  .card:hover .card-name { color: #ffffff; }
+
+  /* ── Card inner layout ── */
   .card-inner {
     display: flex;
     height: 100%;
     gap: 0;
     position: relative;
     z-index: 2;
+    margin: 0 -12px 0 0;
   }
 
-  /* Left content: 76% width */
+  /* Left content: 70% width, sits above photo */
   .card-content {
-    flex: 0 0 76%;
-    max-width: 76%;
+    flex: 0 0 70%;
+    max-width: 70%;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
     min-width: 0;
+    position: relative;
+    z-index: 2;
   }
 
-  /* Right photo: 24% width */
+  /* Photo: absolute, right 0, full card height, 43% wide — overlaps text by 11% */
   .card-photo-wrap {
-    flex: 0 0 24%;
-    position: relative;
-    overflow: hidden;
-    margin: -6px 0 0 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 43%;
+    z-index: 1;
     border-radius: 0 7px 7px 0;
   }
   .card-photo {
@@ -214,21 +219,21 @@
     opacity: 1;
     pointer-events: none;
     filter: saturate(1.5) brightness(1.15);
-    mask-image: linear-gradient(to right, transparent 0%, black 22%);
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 22%);
+    mask-image: linear-gradient(to right, transparent 0%, black 4%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 4%);
   }
 
   /* ── Row 1: number · name · price (same line) ── */
   .card-row {
     display: flex;
     align-items: baseline;
-    gap: 5px;
+    gap: 3px;
     flex-wrap: nowrap;
     min-width: 0;
   }
   .card-number {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(0.85rem, 1.1vw, 1.15rem);
+    font-size: 1.898rem;
     letter-spacing: .06em;
     color: var(--brand-red);
     opacity: 1;
@@ -238,7 +243,7 @@
   }
   .card-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(0.8rem, 1.05vw, 1.1rem);
+    font-size: 1.898rem;
     letter-spacing: .05em;
     color: var(--white);
     line-height: 1.1;
@@ -250,7 +255,7 @@
   }
   .card-price {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(0.8rem, 1.05vw, 1.1rem);
+    font-size: 1.898rem;
     letter-spacing: .04em;
     color: var(--brand-yellow);
     white-space: nowrap;
@@ -272,31 +277,53 @@
     flex-wrap: wrap;
   }
   .tag {
-    font-size: .55rem;
-    letter-spacing: .06em;
+    font-size: .651rem;
+    letter-spacing: .07em;
     text-transform: uppercase;
-    padding: 1px 5px;
+    padding: 2px 7px;
     border-radius: 2px;
     font-weight: 700;
     white-space: nowrap;
   }
-  .tag-veg { background:#1a3d1a; color:#5cde5c; border:1px solid #2d6b2d; }
-  .tag-hot { background:#3d1515; color:#f56565; border:1px solid #6b2424; }
-  .tag-sea { background:#0f2a3d; color:#4db8ff; border:1px solid #1a4a6b; }
+  .tag-veg { background:#1a3d1a; color:#5cde5c; border:1px solid #2d6b2d; animation: pulseVeg 3.5s ease-in-out infinite; }
+  .tag-hot { background:#3d1515; color:#f56565; border:1px solid #6b2424; animation: pulseHot 3.5s ease-in-out infinite; animation-delay: .8s; }
+  .tag-sea { background:#0f2a3d; color:#4db8ff; border:1px solid #1a4a6b; animation: pulseSea 3.5s ease-in-out infinite; animation-delay: 1.6s; }
+
+  @keyframes pulseVeg {
+    0%,100% { transform: scale(1);    box-shadow: none;                    border-color: #2d6b2d; color: #5cde5c; }
+    50%      { transform: scale(1.03); box-shadow: 0 0 10px #5cde5c66; border-color: #5cde5c; color: #88ff88; }
+  }
+  @keyframes pulseHot {
+    0%,100% { transform: scale(1);    box-shadow: none;                    border-color: #6b2424; color: #f56565; }
+    50%      { transform: scale(1.03); box-shadow: 0 0 10px #f5656566; border-color: #f56565; color: #ff9090; }
+  }
+  @keyframes pulseSea {
+    0%,100% { transform: scale(1);    box-shadow: none;                    border-color: #1a4a6b; color: #4db8ff; }
+    50%      { transform: scale(1.03); box-shadow: 0 0 10px #4db8ff66; border-color: #4db8ff; color: #88d4ff; }
+  }
 
   /* ── Row 3: ingredients ── */
   .card-ingredients {
-    font-size: clamp(0.6rem, 0.72vw, 0.72rem);
-    letter-spacing: .04em;
+    font-size: .935rem;
+    letter-spacing: .05em;
     text-transform: uppercase;
     color: rgba(255,255,255,0.88);
-    line-height: 1.4;
+    line-height: 1.5;
     white-space: normal;
     word-break: break-word;
+    max-width: 85%;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
     flex: 1;
   }
 
-  @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  /* ── Card gradient variants ── */
+  .card-g1 { background: linear-gradient(145deg, #0a0000, #3a0a0a) !important; border-color: #5a0f0f !important; }
+  .card-g2 { background: linear-gradient(145deg, #0d0d0d, #2a2a2a) !important; border-color: #3a3a3a !important; }
+  .card-g3 { background: linear-gradient(145deg, #0d0d0f, #1e2028) !important; border-color: #3a3d48 !important; }
+  .card-g4 { background: linear-gradient(145deg, #1a0f00, #2e1f00) !important; border-color: #5a3d00 !important; }
   .card:nth-child(1){animation-delay:.03s} .card:nth-child(2){animation-delay:.06s} .card:nth-child(3){animation-delay:.09s}
   .card:nth-child(4){animation-delay:.12s} .card:nth-child(5){animation-delay:.15s} .card:nth-child(6){animation-delay:.18s}
   .card:nth-child(7){animation-delay:.21s} .card:nth-child(8){animation-delay:.24s} .card:nth-child(9){animation-delay:.27s}
@@ -327,7 +354,7 @@
 /* ═══════════════════════════════
    TICKER – inject content & loop
 ═══════════════════════════════ */
-const LOGO_SRC = 'data:image/png;base64,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';
+const LOGO_SRC = 'data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAEsASwDASIAAhEBAxEB/8QAHQABAAICAwEBAAAAAAAAAAAAAAcIBgkBBAUDAv/EAFMQAAEDAwEGAgUGCAcNCQAAAAEAAgMEBQYRBwgSITFBE1EiQmFxgRQyUnKRoQkVQ2KxssHRFiMzU4KSohcYNlRWc4OUwsPS0/AkNFV0dYSTs+H/xAAbAQEAAgMBAQAAAAAAAAAAAAAABAYDBQcCAf/EADgRAQABAwICBggEBgMBAAAAAAABAgMEBREhMQYSQVFhcRMyQoGRobHRFDPB8BUiQ1JT4RYjsvH/2gAMAwEAAhEDEQA/AKZIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIu7YrTcr7eKSz2eimrrhWSiKnp4W8T5HHoAP+tFeLYpuf41aaCC57SXuvV0e0Odb4ZXMpYD9Eubo6Rw89Q3toepCiCLbVQ7MNm9FStpaXAcYjiaNOH8VQnX3kt1PvKwfaNuz7J8wpZvBx+LH69w9CrtIEHCfbEP4sjz9HX2hBrNRSPt32PZPskyFtDeGirttSSaG5QtIiqAOxHqvHdp+BI5qOEBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBdyyWu43u70totNHNW19XKIoIIW8T5HHoAF0196CsrLfWR1lBVT0lTEeKOaCQsew+YcOYQbHt1nYJbtlVnbeLwyGty6si0qJx6TKRh6wxH9Z3f3Kc1rHwveV2xYvwRx5XLdqdpBMN1jFSHewvP8Zp7nBTdhe+608EWZYURz9OotVRry9kUn/GguUiiLC95HY7lHAyHLYLXUOOngXRhpSP6bvQ+xxUrUNZSV9MyqoaqCqgfzbLDIHtd7iORQePtAw/H87xWrxrJaFtXQVLeY6PjcPmvY71XDsf0gkLWlvA7Hr/sjys0FeHVdoqXOdbbi1mjJ2D1XfRkHdvxGoK2mLH9oOHY/nmK1eNZLQtq6Cpb7nxO9V7Heq4dj+zUINQ6KS94DY/kGyTKzb69r6u0VLnOttxazRk7B6p+jIOWrfiORCjRAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQF9KeGWonZBBG6SV7g1rWjUk+S+amDA8UistO2sqg2Wvkb16iIHsPb5n/ox8jIpsU7zzbfR9Iu6ne6lPCmOc90feexiUuzm9NpWSxz0r5S3V8RcQWnyB6H7l4Fyx+9W7U1dtqGNHMvDeJv2jUKd0Wso1G5HrRuvGR0Mwq4/wCqqaZ+Mfv3q6Ip5uNhs9x1NZbqeRx6v4eF39Yc1jVx2b2ubV1FV1FK7ydpI39h+9S6NRt1etGyv5XQ3Nt8bVUVx8J+fD5orXsY1lGSYzU/Kcdv90tEuocXUdU+LiI8+EjX4r17js9vtNq6m8Csb+Y/hd9jtP0rG6+23Cgdw1tFUU/kZIyAfce6mUXrdfqyruTp2Xi/nW5j3cPjyTnhm9vtcsPDHcqy3ZFACNW19KGvA8g+PhOvtdqpuwzfXxGt4Ysrxa6WiQ6Ay0cjaqL3nXgcPgHKiaLIhNnNfm2w3bZilTi9TlFnr6arAAp6iX5NUxyeq+Nsoa4PB6EA+R1BIND9v2yG/wCyXKjb7gHVdpqSXW64tboydnkfovHLVvxGoIUbL1Tkl/dYn2F96r5LU9zXmiknc6EOb0cGE6Bw8wNdCR3QeUiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAi5AJOgBJ9i4QFNOz68Mu2PQtc/WppgIpgTz5dHfEffqoWXo4/eKyyXBtZRu59HsPzXt8io2Vj+mo2jnDeaBq38NyevV6lXCfv7k9IvBxzLLTeY2tZO2nqT1glcAdfYfW+H2L3lX66KqJ2qjZ1vHybOTRFyzVFUeAiIvLOLh7WvaWuaHNPUEagrlEHiXHE8frtTLbYo3H1of4s/dyPxWM3HZpA7V1uuUjPzJ2B33jT9CkFFnoybtHKpqsrRMDK/MtRv3xwn5bIZuOD5FR6kUjapg9aB/F93I/csfqKeemkMdRDJC8dWyNLT9hVhl8qmmp6qPw6mCKZn0ZGBw+wqZRqVUetG6u5XQmxVxsXJp8+P2/VXlFM1xwbHazUtpX0rz60D9PuOo+5YzctmlQ3V1vuMcnkyZpaftGv6ApdGfZq5zsr2V0T1GxxppiuPCf0nZH6L0r5Y7nZZWx3CnMfHrwOBDmu9xC81TKaoqjeJV27auWa5ouUzEx2TwERF9YxERAREQEREBERAREQEREBERAREQF96Ckqq+tgoaGnlqaqokbFDDEwufI9x0DWgcySey4oqWprayGjo6eWoqZ3iOKKJpc+RxOgaAOZJPZbBt0rd5ptndFDluWQRVGW1EesUZ0cy3McObW9jIQdHO7fNHLUuDydg+7TR4js5vNyyyniqsru1pqKdsZ0cy3slic0saehkIdo5w9w5al1CiNDoVuXIBBBGoK1AZzbPxLm19s+mnyG41FNp9SRzf2IPGRfqJwZKxzmh4DgS09D7FPu0Ld+ncw3bBahs0ErfEFvqJNHtBGujHnkR7Hae8qDlajj4ldFF6rbrb7T2cNufdzSbGJdv01VW432+KAF6VDfrzQtDaW51UbB0b4hLfsPJcX6xXmw1Rpbza6ugmB04Z4izX3E8iPaF5ylxNFyneNpj4sdFy7Yq3pmaZ+EsogzzJYwA6ril0+nC39gC7Ue0a/N+dDQv98Tv2OWGosc41mfZhPo1vUKOV6r47/Vm7dpV49ahoD7mvH+0v1/dLuv+IUX9r96wZF5/CWf7WaOkOpx/Wn5fZnX90u6f+H0X9r965G0u5d7dSH3F371giJ+Ds/2n/ItT/wA0/L7JAj2m1QPp2mF3umI/Yu3BtNpj/L2mZn1Jg79ICjRF5nBsT7LNR0o1Sn+rv5xH2S3TbRbDLylZWQHzdGCPuJXp0mX45U8mXSJh8pQWfrAKEUWKrTrU8pmE610zz6PXppn3TH0n9E8V0VoyC3PpHzU9VC/vHIHFp7EEdCofyqwVdgrzBOOOF+phmA5PH7D5heQCQdQSD5hdmW4181L8lmrJ5YNQRG+QuaCO4B6LJYxqrE8Kt47kTVdasapRvctdW5HKYn5TG3L38HVREUxXBERAREQEREBERAREQEREBERAX1o6aorKuGkpIJaioneI4oo2lz3uJ0DQBzJJ5aJS089XVRUtLDJPPM8RxRRtLnPcToGgDmSTy0WwDdH3d4MBpIMxzCmjnyqdmtPA7RzbcwjoOxlI6nt0HckPpuk7vFPs+o4cuy6niqMrnZrDCdHMtzCPmjsZSOru3QdybHoiAtWm9RavxPvC5nScOgkuLqof6ZrZf9tbS1ru/CB2j8XbfXVwHK6WqnqSfa3iiP3RhBXhXx2ZVzrls7x6te7ifLbYOM+bgwB33gqhyuVuz1xrdj9qY53E6lkmgJ90jiB9jgqh0xtdbFor7qvrE/Zvuj9e1+qnvj6SkSrpqasgdT1dPFUQu+dHKwOafeDyWJ3TZbs9uUhkqcTtocevgMMGv/xlq8LbvtJuOzxlndb7fSVny8zB/jlw4eDg000P5x+xRd/fK5H/AJO2n+vJ+9VjT9J1K7ai9jTtE91W3h3tzlZ2HRXNu9xmPDdJ9ZsG2cTu1itlXS+yKskP6xK6Mm7xgLuk16Z9Wqb+1hWEWjeLyGtu1HRvx+1NbPOyJzg6TUBzgNevtVlV7zb2r6dNMXrsxvy/m3eca3gZe826I4eGyHTu54J/jt+H/uY/+Wvyd3LBf8fv/wDrEX/LUyIoX8c1D/NKT/DcX/HCCMr2FbPsfxq43upr7+YqKnfMW/KYhxEDk3+T6k6D4qsh01Og0CvptEskmSYPeLJC4Nmq6V7IiToOPTVuvs4gFRCtpqiiq5qSrhfBUQvMcsbxo5jgdCCPNXXornXMq3c9NXNVUTHPuV3W8aixXT6OnaP1fFTRimwefKMQt2Q2rKIA2th4/CnpC3gcCWubxBx10cCNdOyhqCKWeZkEEb5ZZHBrGMGrnE8gAO5V59kthqMZ2c2WyVmgqYIC6YD1XvcXub8C4j4LP0l1K7g2aJs1bVTPhO8bePjsxaPh0ZNyqLlO8RHzV3uG7tnVOC6mqrNWadAyoe1x/rMA+9YxdNkG0e3Nc6bF6qVo70z2TE/BjifuV2EVYtdL86n1opn3faW5r0HGq5TMNfV0s13tTg26WuuoSeQFRTuj1/rALorYjIxkjCyRjXsPVrhqCsQy3BtnVVRVFff7BZ4IWNLpqngFOQPMvbwn71tcfplTVMRdtT7p3+XD6oV3o/MRvRX8VHUWYbTzgDbt4OCRXMwMJEk1RLrE/wDzbS3j09rj8O6w9XGxd9LbivqzG/ZPCVfuUdSqad4ny5CIiyvAiIgIiICIiAiIgIiIC+lNDNU1EdPTxSTTSvDI42NLnPcToAAOZJPZcQQy1E8cEET5ZZHBjGMaXOc4nQAAdSSr9bom7rFhNPT5tmtKyXJpWcdJSPALbc0jqfOUjqfV6DnqUH03Rd3aHBaWDM8zpY5somZxU1M8Bzbc0j75SOp9XoO5Nl0RAREQFSz8JZZ2tuGGX9g9KWKpo5D9Usez9d6umq3/AIQyzC4bDqa5tj1ktd3hlL9Pmse18ZHuLnM+wINe6s/uc1/i4ne7YXammrmzaeQkYB/uyqwKb9z64iDNrrbHO4RV0HiNHm6N45fY932LRdJLPpdOueG0/Cfs2WkXOpl0+PB7u+d/I4t9aq/3SrmrMb3tsuVyixoW631dZ4bqrj8CF0nDr4Wmug5dCq/fwYyX/J67f6nJ+5Yujd2inTbcTVHb/wCpZNXoqnMrmI7vpD5Yv/hNa/8AzkP64WwEKieNY1kceR2x77BdWtbVxFzjRyAAcY59FewLQ9Mq6a67XVnfhP6Nn0fpmmmveO79RERUpYhYdm+zLDcwqfld4tQFZpoamneYpHD2kcnfEFZiiy2b92xV17VU0z3xweLlqi7T1a43hhOFbLMKxKsbXWu1+JWt+ZU1Mhlez6uvJp9oAKzZEX2/kXb9XXu1TVPjxLdqi1T1aI2jwERQ7tp20UWLeNZMcdFW3satkk+dFSH2/Sf+b0HfyOXDwr2Zdi1Zjefp4yx5GRbx6OvcnaGZbS9omP4Hb/Fuc3j1sjSaeiiI8ST2n6Lfzj8NTyVTNpG0TI86rvEulT4VEx2sFFCSIo/bp6zvzj8NByWNXe5V93uM1xudXNV1c7uKSWV3E5x/67dl1F0zSNAsafEVz/NX393l+91Oz9Uu5U9WOFPd9xfWlp56qpjpqWCSeeVwbHHG0uc8noABzJUs7BtgOZbVqhlZTxfinHmv0lulSw8LtDzbE3kZHdemjRpzIPJX22QbGMD2YULG4/aWS3Hh0mudUBJUyHv6WnoD81oA89eq3zWKd7Ht0fOcr8G45fJ/BW1u0d4crOOskHsj6M783nUfRKjHbrsoyLZNlr7Pd2GooZiX2+4MYRHVRg/2XjlxN7e0EE7VljG03Bcd2iYlVY1ktGJ6WYaxyN0ElPIPmyRu9Vw1+PMHUEhBqORSDt02UZFsny59nvDDPRTEvt9wYwiOqjB6+x41HE3t7QQTHyAiIgIiICIiAv3DFJNMyGGN8kkjg1jGDVzieQAA6lfhXA/B+bKaS4y1O0++UrZm0kxprPHI3VokAHiTadyNQ1p7Hi7gFBnO6Hu6R4ZBTZxm9IyTJJGh9FRSDUW9pHznecxH9Xp110s+iICIiAiIgKO95exuyLYLmVsYzjk/FklQxunV0OkzQPbrGFIi+VbTw1lHNSVDA+GeN0cjT6zXDQj7Cg02LPNgF0/FW1ywyk+hPOaVw8/FaWD+0QfgsXy60S4/ld3sM/F4turZqR+o0Osby0/oXTttXLQXGmroCWy00zJWEdnNII+8LBlWYv2a7U+1Ex8YZbNz0dymvumJbC0XXtdZDcbbS3CmPFDUwsmjPm1zQR9xXYXEpiYnaXRoneN4EXD3NYwve4Na0akk6ABYdcNqez2gq3UtRldv8Vp0Phl0oB+swEfestrHu3p2t0zV5RMvFd2i368xHmzJF59hvlnv1H8sstzpK+DoXwSh/CfI6dD7CvQWOqmqierVG0vVNUVRvAiKvOSbxFytOQ3K1sxmklbR1ctOHmqcC4MeW66cPfRTMHTcjOqmmxTvMc+MR9UfJy7WNETdnbdYZCQ0EkgAcySq1f3zF0/yUo/9bd/wrF9o+3DIsushs9PSRWell1FSYJS58zfo8RA0b5gdfdyO2s9FdQrrimumKY794nb4Sg3NbxaaZmmd57tpZlty23FxnxvCqrRvNlVcoz182xH/AG/s81Xgkkkkkk8ySuF6WM2K8ZNfaWx2G3z3C41bwyCCFurnH9gHUk8gOZXQ9P06xgWvR2o857Z81Uysu5lV9euf9OhDFJNMyGGN8ksjg1jGN1c4nkAAOpVxd2vdOMrabKtqdO5jDpJTWInQnuDUHt/mx/S7tUobsu7hZtmkEGQ5G2nu2WubqJNOKGh1HNsWvV3m88+w0GutgFORnyo6amo6SKko6eKnp4WBkUUTA1jGgaAADkAPJfVEQEREGMbTsEx3aLiNTjWS0YnpZhxRyN0ElPIB6MkbvVcNfiNQdQSFrO257Kci2T5c+zXiMz0UxL7fcGN0jqoweo8nDlxN6g+YIJ2sLD9sWz+zbS8DrsXvETf45hfS1HDq+mnAPBI33HqO4JHdBqXRd/IbTW2G/XCyXKLwq231MlNUM+i9ji1w+0LoICIiAiIgLaRuoUEFu3d8MhgA4ZLf47tO7pHue773Fat1sd3E8upsi2E0VoEoNdYJpKOdhPpcBcXxu08i13CPawoJ7REQEREBERAREQa19+HGjju8Hd6hjeGnvEMVxi5afObwP/txvPxUHq8/4R3EjW4bYMzp4yZLZVOo6kgfkphq0n2B7NPfIqMILl7tt9F72U29j3l09uc6ik17cHNn9hzfsUkKsO6DkHyXJ7njkz9I6+ATwgnl4kfUAeZa4n+grPLkev4v4bPuUxynjHv/AN7wvel3/TYtM9scPgq5vObRa64ZBUYda6l8NtojwVhjcQaiXqWn81vTTuQevJQesk2owT0+0jJIqnXxfxpUOJPcGRxB+IIKxtdM0vGt42JRRbjhtE+cz2qdm3q71+qqvve1huT3jEr5Dd7NVOhnjI42a+hK3ux47tP/AOjQq8WGX6lyjFrffqMcMVZCJODXUsd0c0+0OBHwVA1cndmgnh2PWrxmuaJJJ3xg/RMrtPt5lVzpjjWvQUX9v5t9vONp+zb6Ber9LVa7Nt0lKhO0L/D7If8A1Sp/+1yvsqE7QwRn2Qggg/jSp6/51yg9DPzrvlH1SOkP5dHnLwkRe1hGL3vM8oocbx6ifV3Gtk4I2Do0d3OPZoGpJ7ALoKrPrs/w/IM7ymlxvGaB9ZX1J5AcmxtHV73dGtHcn9JAWyPd42JY7sjsOkAZcMgqmAV1ycz0nd/DjHqxg9up6nsB2t3zY/YdkeJNt9EGVd4qWtdcriW6Onf9Fv0Y289G/E8yVJiAiIgIiICIiAiLh7msY573BrWjUknQAINZ2+tQw0O8nlDYAA2b5NOQOznU8Zd9p1PxUMrPd4TLIM32z5PktI4PpKmsMdM8HUPiiaImO+LWA/FYEgIiICIiApE2A7VbvslzmO+0DHVVBOBDcaIu0FRFrry8nt6tPbmOhKjtEG3rAMvsGdYrR5LjVcyst9U3UEcnRu9Zj2+q4dCP2aFe8tWu73tjv2yPKhWUZfWWWqcG3K3F2jZm/Tb9GQdj8DyWy3A8tsOcYtR5Jjdcyst9U3Vrhycx3djx6rgeRBQe6iIgIiICIiDENs+JMzrZZkWKlodLXUT20+p0Anb6cR+D2tWpmWN8Ur4pWFkjHFrmkaEEdQtyq1k74uFHC9u16jhh8OguxFzpNG6N0lJLwO3KQPGnlogjfBb7JjWYWq+xa/8AY6lr3gdXM6Pb8Wkj4q+1PNFUU8dRA8SRSsD2OHRzSNQVrvVxd2nJRkGzOlpZpOKrtTvkcgJ58AGsZ93CQ3+iVSumOH1rdGTTHLhPlPL5/VYtAyNq6rM9vGP3++TH94XZJVZPU/wnxqNr7oGBtVSlwb8oa0aBzSeXGBoND1AHcc603GzXe3VRpa+11tLODoY5oHMdr7iFsEXOpWm03pRfw7UWa6evEcuO0x4drYZmi28iublM9WZ59qmuy/Y/kuW3GGWvoqm1WYOBmqZ2Fjnt8o2nmSfPTQfcbg2uhpbZbaa3UMLYaWmibFDG3o1rRoB9gXYXjZrkltxLG6u+3SThgp2+iwH0pXn5rG+0n9/QKDqWq5OrXaaZjypjvn6yk4mFZwaJnfzmWKbc9osOCY5wUr2PvVa0to4jz4B3lcPIdvM+zVU1q6ierqpaqqmfNPM8vkkedXPcTqST3JK9bN8luWXZLVXy6ScU07vRYD6MTB81jfYB9vM9SvEXQ9E0mnTrG0+vPOf08oVTUc6rLu7+zHJ2bZQ1lzuNPbrfTS1VZUytighibxPke46BoA6kkrZPur7E6LZRigqrhHFPlVxjBr6gekIW9RAw/RHcj5xGvQN0jzcf2GDHbbDtIyujAvFbFraqaVvOkhcP5Ug9JHg8vJp83EC1a3LXiIiAiIgIiICIiAqh76G8JT0VFX7NMJqxLXTNMF4r4nejA08nQMI6vPRx9Uajrrw9nfA3jxYm1ez/AACuBuxBiudzhd/3QdDFGR+U7F3qdB6XzaNuJc4ucSSTqSepQcIiICIiAiIgIiIClHd42y33ZHlIqqUvrLHVuAuVuLtGyt+mzs2QDoe/Q8ukXIg2+4NldizXGKPJMcrmVtuq2cTHt6tPdjh1a4HkQei9tau93TbPfNkeT+PD4lbYat4Fxt3FyeOniM15NkA6Hv0PYjZXhOUWPM8Zo8jxyvjrbdVs4o5G9Qe7XDq1wPIg8wUHsoiICIiAqw/hDMHN72a0GZUkPFV2Co4KggczTTENP9V4YfYC5WeXm5VZKHJMauWP3OPxKK40slNO3vwvaWnT28+RQaeVLO67lP4i2httVRLw0l4Z8nOp0AmHOM+/XVv9NR/nGO1+I5hdsZubeGrttU+nkOmgdwnQOHscNCPYQvKpZ5qWpiqaeR0U0LxJG9p0LXA6gj2gqLm4tOXj12avaj/58JZse9Ni7TcjsbD0WPbN8lhy7Crbfoi0PqIgJ2D1JW8nt/rA6ezRZCuMXbVVqubdcbTE7S6HRXFdMVU8pcSPZHG6SR7WMaC5znHQADqSqcbfdoj83yX5LQSu/ElA4spWjkJndHSke3oPIe0lSbvR7RfkNI7CLPPpU1DAbjIw844z0i97up/N0HrKs6vnRXR+pT+Muxxn1fLv9/Z4easa3n9afw9E8I5/YVkNyrYl/DzIxmWSUnFjVqmHhRSN9GuqBzDdO7G8i7zOjefPSKthmza7bU9oFHjVuDoqf+Vr6vTUU0AI4ne89GjuSO2pG0jEcftOKY1QY7Y6RtLbqCEQwRN7Adye5J1JPcklXVXXqgADQcgiIgIiICIiAiIgKpu+BvHtsLavAMArg67kGK53KF3KjHQxRkflexd6nQel83nfA3j24+2rwDAa4OvDgYrlcoXaijHQxRkflfN3qdB6XzaMuc5zi5xLnE6kk8yUBznOcXOJc4nUknmSuERAREQEREBERAREQEREBSvu47ar3siybxGeJXY9WPAuNv4uo6eLHryEgHwcOR7ERQiDcBhmTWTMMao8ix2vjrrdWM44pWH7WuHVrgeRB5ghewtYO7dtsvWyPJNR4tdjlY8fjC38Xw8WPXkJAPg4DQ9iNlGH5JZcuxyjyHHq+KuttZHxxSsP2gjqHA8iDzBGiD1kREBERBSH8Ins8NHfbZtIt8GkFeBQ3ItHSZo1iefrMBb/AKMeaqKtuO1TDbfn+z+8YlcgBFcKcsZJpqYpRzjkHta4NPw0WqDJ7JccbyK4WC705p6+31D6eeM9nNOh08weoPcEFBL+6fmQtmQVGJVsvDTXI+LS8R5NnA5j+k0fa0Dupz2t5tS4LiE90k4JK2T+KooCf5SUjlr+aOp92nUhUgo6mejq4aullfDPA9skUjDoWOB1BHtBWTbTM7u+eXenr7nwxNp4GxRQRn0GnQcbh7XO1Pu0HZVbUOjtOVqFN/2J9bzj79vk3eLq02MWbXtRy9/2Y5cq2quVwqLhXTvnqqiR0ssjzqXOJ1JS20VXcrhT2+gp5KmrqZWwwQxt1dI9x0a0DuSSAuurnbg+xvhaNquR0nM8Udjhkb0HMPqNPta3+kfolWiIiI2hpZned5Trux7JaTZPs9ioJWRyX6vDZ7rUN0OsmnKJp+gwEgeZ4j30Uqoi+vgiIgIiICIiAqob3+8e3Hm1eA4DWh15IMVyuUTuVGOhijI/K+bvU6D0vm873+8e3HGVeA4DWh16cDFcrlE7UUQ6GOMj8r5n1PrfNos9znvL3uLnOOpJOpJQHuc9xe9xc5x1JJ1JK4REBERAREQEREBERAREQEREBERAUu7tm2687I8k0d4tdjVZIPxhb+Lp28WLXkJAPg4DQ9iIiRBuDxHIrNlmO0eQY/XxV1urIw+GaM8j5gjqHA8iDzBBBXqrWPu07cLxskyLw5fFrsZrJB8voA7m09PFi15B4Hbo4DQ9iNkmKZBZ8px6jv8AYK+KvttZGJIJ4zycPIjqCDqCDzBBBQeoiIgKnf4QHZKaiCPapY6bWSFrKe9MY3mWfNjn+HJjvZweRVxF1rrQUd1tlVbLjTx1NHVxOhnhkGrZGOBDmkeRBKDTgikfeK2Y1myvaVWWB4kktk2tRa6h3PxadxOgJ+k06tPtGvQhYBbKGrudxprdQU8lTV1UrYYIYxq6R7iA1oHmSQEEkbtGyuq2rbSKa0vbIyy0elTdZ28uGEHkwH6Tz6I8uZ9UraDbqOkt1vp7fQ08dNSU0TYoIY28LY2NGjWgdgAAFHW7dsupNlOzelsvDHJd6rSoutQ3n4kxHzQfosHoj4nuVJiAiIgIiICIiAqp74G8c3GmVWA4FWh17cDHcrjE7UUQ7xxn+d8z6n1vm873+8c3GY6rAsCrQ6+OBjuNxidqKEd42H+d8z6n1vm0Ue5z3ue9xc5x1c4nUk+aA9znvc97i5zjqSTqSfNflEQEREBERAREQEREBERAREQEREBERAREQFMe7Ntyu+yTIPk9QZq7F62QGuogdTGenjRa9HgdR0cBoegIhxEG4bF79aMnsFHfrFXw11urIxJBPEdQ4fsIOoIPMEEFektZu7Ht0u2yW/8AySrM1ditbIDW0QOrondPGi16PA6jo4DQ8wCNkOM3y05LYaO+2OuhrrdWRiWCeI6tc0/oI6EHmCCDzQeiiIgj/bhsmxja1jcVpyATwT0rzJR1tOQJadxGh01BBadBq09dB0IBGDbDt2HENmeTNyaS51d+usAIpH1ETY46ckEFzWDXV2hI1J5a8hrzU8ogIiICIiAiIgKq299vHMxeOqwPA61r768GO4XGJ2ooQesbD/O+Z9T63zed77eNZisdVgeCVjX35wMdwuETtRQA9Y2H+d8z6n1vm0Rke+SR0kj3Pe4lznOOpJPUkoEj3yPdJI5z3uJLnOOpJPcr8oiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICmndh27XXZNfRRVxmrsUrJAayjB1dA48vGi16OHcdHAeehELIg3EY5erVkVjpL3ZK6Gut1ZGJYJ4nate0/oPYg8wQQV6C1p7r23e6bJ74LdcXTV2J1kgNXSg6up3Hl40Q8/NvRwHmAVsex+8WvILLSXqy10Ndb6yIS088TtWvae/7x1B5FB3kREBERAREQFVne93jWYpHVYJglY1+QPBjr6+J2ooAerGH+d9vqfW6fre93jWYlFVYJgtY1+QvaY6+vjOooAerGH+e9vqfW6UNlkfLK6WV7nyPcXOc46lxPUk9ygSPfLI6SR7nveS5znHUknqSV+URAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQFOG63t5uWym9C13V01biVZJrU0wOrqVx/LRDz82+sPbooPRBuLsV2tt9s9JeLPWw11vq4hLT1ELuJkjT0I/d2XdWtrdZ293HZVeG2e8PmrcRrJdaiAek+kees0Q/Wb39/XYtj16tWQ2amvNkuFPcLfVMD4aiB4cx49/n2I6g8ig76IiAqub3u8ZHiEVTguDVjZMie0x19dGdRbwerGnvL+p7+nG9tvI0+K01ThWA18c+QSAx1tfC4ObQDoWtPQy/qe/pQ6aSSaV800jpJHuLnvcdS4nqSe5QJpJJpXyyvdJI9xc97jqXE9ST3K/CIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgLMtmu1DOtnVW6bEchqaCOR3FLTHSSCU9NXRu1aT7dNfasNRBZ6h31dpENK2Oqx3GKmVo08XwpmcXtIEmn2aLBto28xtZzWkloJr1FZqCYEPp7TEYOIaaaF5Jk08xxaHyUNIg5JJOpOpXCIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIg//2Q==';
 function buildTickerItem() {
   return `<span class="ticker-item">
     <img class="ticker-logo" src="${LOGO_SRC}" alt="">
@@ -451,31 +478,31 @@ animSparks();
    PIZZA CARDS
 ═══════════════════════════════ */
 const pizzas=[
-  {n:1,  name:"Margarita",        price:"8.9€",  ing:"Tomate, Mozzarella",                                                         tags:["veg"],  photo:"https://upload.wikimedia.org/wikipedia/commons/a/a3/Eq_it-na_pizza-margherita_sep2005_sml.jpg"},
-  {n:2,  name:"Margarita Búfala", price:"10.5€", ing:"Tomate, Mozzarella de Búfala, Albahaca",                                     tags:["veg"],  photo:null},
-  {n:3,  name:"Peperoni",         price:"9.9€",  ing:"Tomate, Mozzarella, Peperoni",                                               tags:[],       photo:null},
-  {n:4,  name:"Prosciutto",       price:"9.9€",  ing:"Tomate, Mozzarella, Jamón Cocido",                                           tags:[],       photo:null},
-  {n:5,  name:"Carbonara",        price:"10.9€", ing:"Nata, Huevo, Bacon, Cebolla",                                                tags:[],       photo:null},
-  {n:6,  name:"Barbacoa",         price:"12.9€", ing:"Tomate, Mozzarella, Pollo, Bacon, Champiñones, Salsa Barbacoa",              tags:[],       photo:null},
-  {n:7,  name:"4 Quesos",         price:"11.9€", ing:"Tomate, Mozzarella, Queso Azul, Queso de Cabra, Parmesano",                  tags:["veg"],  photo:null},
-  {n:8,  name:"Pollo al Ajo",     price:"11.9€", ing:"Tomate, Mozzarella, Pollo al Ajo, Chili Fresco, Alioli",                     tags:["hot"],  photo:null},
-  {n:9,  name:"Bella Napoli",     price:"12.5€", ing:"Tomate, Mozzarella, Jamón Serrano, Tomates Cherry, Rúcula, Parmesano",       tags:[],       photo:null},
-  {n:10, name:"Hawaiana",         price:"10.5€", ing:"Tomate, Mozzarella, Jamón Cocido, Piña",                                     tags:[],       photo:null},
-  {n:11, name:"4 Carnes",         price:"13.9€", ing:"Tomate, Mozzarella, Carne Picada, Pollo, Peperoni, Jamón Cocido",            tags:[],       photo:null},
-  {n:12, name:"Vegetariana",      price:"11.9€", ing:"Tomate, Mozzarella, Cebolla, Maíz, Pimiento, Champiñones",                   tags:["veg"],  photo:null},
-  {n:13, name:"Primavera",        price:"11.9€", ing:"Tomate, Mozzarella, Queso de Cabra, Aceitunas Negras, Rúcula",               tags:["veg"],  photo:null},
-  {n:14, name:"Capri",            price:"11.9€", ing:"Tomate, Mozzarella, Jamón Cocido, Champiñones, Aceitunas Negras",            tags:[],       photo:null},
-  {n:15, name:"César",            price:"12.5€", ing:"Nata, Mozzarella, Pollo, Rúcula, Parmesano, Salsa César",                   tags:[],       photo:null},
-  {n:16, name:"Mexicana",         price:"12.9€", ing:"Tomate, Mozzarella, Carne Picada, Pollo, Cebolla, Jalapeños, Salsa Picante", tags:["hot"],  photo:null},
-  {n:17, name:"Atún",             price:"10.9€", ing:"Tomate, Mozzarella, Atún, Cebolla, Maíz",                                   tags:["sea"],  photo:null},
-  {n:18, name:"Marinera",         price:"14.5€", ing:"Tomate, Mozzarella, Atún, Mejillones, Gambas, Calamares",                    tags:["sea"],  photo:null},
-  {n:19, name:"Diavola",          price:"13.5€", ing:"Tomate, Mozzarella, Peperoni, Carne Picada, Cebolla, Pimiento, Jalapeños",   tags:["hot"],  photo:null},
-  {n:20, name:"Gourmet",          price:"13.5€", ing:"Tomate, Mozzarella, Pollo, Queso de Cabra, Cebolla Caramelizada",            tags:[],       photo:null},
-  {n:21, name:"Bianca",           price:"11.5€", ing:"Nata, Mozzarella, Jamón Cocido, Cebolla, Champiñones",                      tags:[],       photo:null},
-  {n:22, name:"Gambas Pil-Pil",   price:"11.5€", ing:"Tomate, Mozzarella, Gambas, Cebolla, Chili Fresco",                         tags:["sea","hot"], photo:null},
-  {n:23, name:"Burratina",        price:"14.5€", ing:"Pesto, Mozzarella, Burrata, Mortadela, Rúcula, Pistachos",                  tags:[],       photo:null},
-  {n:24, name:"4 Stagioni",       price:"12.9€", ing:"Tomate, Mozzarella, Peperoni, Jamón Cocido, Aceitunas Negras, Champiñones",  tags:[],       photo:null},
-  {n:25, name:"Boloñesa",         price:"11.9€", ing:"Nata, Mozzarella, Salsa Boloñesa, Carne Picada",                            tags:[],       photo:null}
+  {n:1,  name:"Margarita",        price:"8.9€",  ing:"Tomate, Mozzarella",                                                                                    tags:["veg"],      photo:null},
+  {n:2,  name:"Margarita Búfala", price:"10.5€", ing:"Tomate,\u00A0Mozzarella\u00A0de\u00A0Búfala, Albahaca",                                                 tags:["veg"],      photo:"https://lh3.googleusercontent.com/d/1QgtP6tMFS_ABq0IgsyfuPUH76xCF6C6b"},
+  {n:3,  name:"Peperoni",         price:"9.9€",  ing:"Tomate, Mozzarella, Peperoni",                                                                          tags:[],           photo:"https://lh3.googleusercontent.com/d/1kJT15AHa4zjina1fj1sGlZih7XgcJ57I"},
+  {n:4,  name:"Prosciutto",       price:"9.9€",  ing:"Tomate, Mozzarella, Jamón\u00A0Cocido",                                                                 tags:[],           photo:null},
+  {n:5,  name:"Carbonara",        price:"10.9€", ing:"Nata, Huevo, Bacon, Cebolla",                                                                           tags:[],           photo:null},
+  {n:6,  name:"Barbacoa",         price:"12.9€", ing:"Tomate, Mozzarella, Pollo, Bacon, Champiñones, Salsa\u00A0Barbacoa",                                    tags:[],           photo:null},
+  {n:7,  name:"4 Quesos",         price:"11.9€", ing:"Tomate, Mozzarella, Queso\u00A0de\u00A0Cabra, Queso\u00A0Azul, Parmesano",                              tags:["veg"],      photo:null},
+  {n:8,  name:"Pollo al Ajo",     price:"11.9€", ing:"Tomate, Mozzarella, Pollo\u00A0al\u00A0Ajo, Chili\u00A0Fresco, Alioli",                                 tags:["hot"],      photo:null},
+  {n:9,  name:"Bella Napoli",     price:"12.5€", ing:"Tomate, Mozzarella, Jamón\u00A0Serrano, Tomates\u00A0Cherry, Rúcula, Parmesano",                        tags:[],           photo:null},
+  {n:10, name:"Hawaiana",         price:"10.5€", ing:"Tomate, Mozzarella, Jamón\u00A0Cocido, Piña",                                                           tags:[],           photo:null},
+  {n:11, name:"4 Carnes",         price:"13.9€", ing:"Tomate, Mozzarella, Carne\u00A0Picada, Pollo, Peperoni, Jamón\u00A0Cocido",                             tags:[],           photo:null},
+  {n:12, name:"Vegetariana",      price:"11.9€", ing:"Tomate, Mozzarella, Cebolla, Maíz, Pimiento, Champiñones",                                              tags:["veg"],      photo:null},
+  {n:13, name:"Primavera",        price:"11.9€", ing:"Tomate, Mozzarella, Queso\u00A0de\u00A0Cabra, Aceitunas\u00A0Negras, Rúcula",                           tags:["veg"],      photo:null},
+  {n:14, name:"Capri",          price:"11.9€", ing:"Tomate, Mozzarella, Jamón Cocido, Champiñones, Aceitunas Negras",             tags:[],           photo:"https://lh3.googleusercontent.com/d/1KBZ4x3S26ZnKhG7ND43Qw-x2NNCNdaGw"},
+  {n:15, name:"César",            price:"12.5€", ing:"Nata, Mozzarella, Pollo, Rúcula, Parmesano, Salsa\u00A0César",                                         tags:[],           photo:"https://lh3.googleusercontent.com/d/1QKOo9Qaf-oPiEhlRMFi5apyBGJFHT-rm"},
+  {n:16, name:"Mexicana",         price:"12.9€", ing:"Tomate, Mozzarella, Carne\u00A0Picada, Pollo, Cebolla, Jalapeños, Salsa\u00A0Picante",                  tags:["hot"],      photo:"https://lh3.googleusercontent.com/d/1P3ldJcXXMmKKBXojKGXF4thieyiviYJq"},
+  {n:17, name:"Atún",             price:"10.9€", ing:"Tomate, Mozzarella, Atún, Cebolla, Maíz",                                                               tags:["sea"],      photo:null},
+  {n:18, name:"Marinera",         price:"14.5€", ing:"Tomate, Mozzarella, Atún, Mejillones, Gambas, Calamares",                                               tags:["sea"],      photo:null},
+  {n:19, name:"Diavola",          price:"13.5€", ing:"Tomate, Mozzarella, Peperoni, Carne\u00A0Picada, Cebolla, Pimiento, Jalapeños",                         tags:["hot"],      photo:null},
+  {n:20, name:"Gourmet",          price:"13.5€", ing:"Tomate, Mozzarella, Pollo, Queso\u00A0de\u00A0Cabra, Cebolla\u00A0Caramelizada",                        tags:[],           photo:null},
+  {n:21, name:"Bianca",           price:"11.5€", ing:"Nata, Mozzarella, Jamón\u00A0Cocido, Cebolla, Champiñones",                                             tags:[],           photo:null},
+  {n:22, name:"Gambas Pil-Pil",   price:"11.5€", ing:"Tomate, Mozzarella, Gambas, Cebolla, Chili\u00A0Fresco",                                                tags:["sea","hot"], photo:null},
+  {n:23, name:"Burratina",        price:"14.5€", ing:"Pesto, Mozzarella, Burrata, Mortadela, Rúcula, Pistachos",                                              tags:[],           photo:"https://lh3.googleusercontent.com/d/1l1_y7Ob55Fhav872wgl3BtHd4wu5Nyt3"},
+  {n:24, name:"4 Stagioni",       price:"12.9€", ing:"Tomate, Mozzarella, Peperoni, Jamón\u00A0Cocido, Aceitunas\u00A0Negras, Champiñones",                   tags:[],           photo:null},
+  {n:25, name:"Boloñesa",         price:"11.9€", ing:"Nata, Mozzarella, Salsa\u00A0Boloñesa, Carne\u00A0Picada",                                              tags:[],           photo:null}
 ];
 
 const tagMap = {
@@ -485,25 +512,34 @@ const tagMap = {
 };
 
 const grid = document.getElementById('menuGrid');
-pizzas.forEach(p => {
+pizzas.forEach((p, i) => {
   const badgesHTML = p.tags.map(t => `<span class="tag ${tagMap[t][0]}">${tagMap[t][1]}</span>`).join('');
   const photoHTML  = p.photo
     ? `<div class="card-photo-wrap"><img class="card-photo" src="${p.photo}" alt="${p.name}" loading="lazy"></div>`
     : '';
+  const gradientClass = i % 2 === 0 ? 'card-g1' : 'card-g4';
+
+  const rowStyle = (p.n === 2 || p.n === 22) ? ' style="width:108%;max-width:108%"' : '';
+  const ingDisplay = p.n === 2
+    ? p.ing.replace(/,\s*/g, ',<br>')
+    : p.ing;
+  const nameStyle  = p.n === 2 ? ' style="font-size:1.6rem"' : '';
+  const numStyle   = p.n === 2 ? ' style="font-size:1.6rem"' : '';
+  const priceStyle = p.n === 2 ? ' style="font-size:1.6rem"' : '';
 
   grid.innerHTML += `
-    <div class="card">
+    <div class="card ${gradientClass}">
       <div class="card-inner">
         <div class="card-content">
-          <div class="card-row">
-            <span class="card-number">${String(p.n).padStart(2,'0')}</span>
+          <div class="card-row"${rowStyle}>
+            <span class="card-number"${numStyle}>${String(p.n).padStart(2,'0')}</span>
             <span class="dot">·</span>
-            <span class="card-name">${p.name}</span>
+            <span class="card-name"${nameStyle}>${p.name}</span>
             <span class="dot">·</span>
-            <span class="card-price">${p.price}</span>
+            <span class="card-price"${priceStyle}>${p.price}</span>
           </div>
           ${badgesHTML ? `<div class="card-badges">${badgesHTML}</div>` : ''}
-          <div class="card-ingredients">${p.ing}</div>
+          <div class="card-ingredients">${ingDisplay}</div>
         </div>
         ${photoHTML}
       </div>
@@ -514,22 +550,31 @@ pizzas.forEach(p => {
 <script>
 /* ═══════════════════════════════
    ANTI-IDLE / ANTI-SLEEP
+   Prevents TV browser from
+   refreshing or sleeping the page
 ═══════════════════════════════ */
+
+// 1. Simulate user activity every 30 seconds
 setInterval(() => {
   document.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }));
 }, 30000);
 
+// 2. Wake Lock API — prevents screen from sleeping (works on modern Smart TVs)
 async function requestWakeLock() {
   if ('wakeLock' in navigator) {
-    try { await navigator.wakeLock.request('screen'); } catch (e) {}
+    try {
+      await navigator.wakeLock.request('screen');
+    } catch (e) {}
   }
 }
 requestWakeLock();
 
+// 3. Re-request wake lock if TV switches input and comes back
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') requestWakeLock();
 });
 
+// 4. Block accidental navigation away from the page
 window.addEventListener('beforeunload', e => {
   e.preventDefault();
   e.returnValue = '';
@@ -538,88 +583,48 @@ window.addEventListener('beforeunload', e => {
 
 <script>
 /* ═══════════════════════════════
-   RANDOM CARD FLICKER
+   CARD ANIMATIONS
+   All numbers pulse in sync (CSS)
+   Subtle inner flash randomly
 ═══════════════════════════════ */
 (function() {
+  // Inject number pulse keyframe once
+  const st = document.createElement('style');
+  st.textContent = `
+    @keyframes numPulse {
+      0%, 100% { color: var(--brand-red); text-shadow: none; }
+      50%       { color: #e04040; text-shadow: 0 0 8px #c22b2755, 0 0 16px #c22b2730; }
+    }
+    .card-number { animation: numPulse 3s ease-in-out infinite; }
+  `;
+  document.head.appendChild(st);
   setTimeout(() => {
     const cards = Array.from(document.querySelectorAll('.card'));
 
-    function flickerCard(card) {
-      if (card.dataset.flickering === '1') return;
-      card.dataset.flickering = '1';
+    cards.forEach((card, i) => {
 
-      const effectType = Math.floor(Math.random() * 3);
 
-      if (effectType === 0) {
-        card.style.transition = 'transform .3s cubic-bezier(.34,1.56,.64,1), border-color .2s, box-shadow .2s, background .2s';
-        card.style.transform = 'translateY(-4px) scale(1.012)';
-        card.style.borderColor = '#c22b27';
-        card.style.boxShadow = '0 8px 28px #c22b2750, 0 2px 8px #00000060, inset 0 0 20px #c22b2718';
-        card.style.background = 'linear-gradient(145deg, #222, #1a1a1a)';
+      // shimmer handled by group scheduler below
 
-        const num = card.querySelector('.card-number');
-        const price = card.querySelector('.card-price');
-        const name = card.querySelector('.card-name');
-        if (num) num.style.textShadow = '0 0 12px #c22b27, 0 0 24px #c22b2780';
-        if (price) price.style.textShadow = '0 0 12px #efa52b, 0 0 24px #efa52b80';
-        if (name) name.style.color = '#ffffff';
+    }); // end cards.forEach
 
-        const duration = 800 + Math.random() * 600;
+    // ── 5 random cards shimmer every 3 seconds ──
+    function shimmerBatch() {
+      const shuffled = [...cards].sort(() => Math.random() - .5).slice(0, 5);
+      shuffled.forEach((card, i) => {
         setTimeout(() => {
-          card.style.transform = '';
-          card.style.borderColor = '';
-          card.style.boxShadow = '';
-          card.style.background = '';
-          if (num) num.style.textShadow = '';
-          if (price) price.style.textShadow = '';
-          if (name) name.style.color = '';
-          setTimeout(() => { card.dataset.flickering = '0'; }, 400);
-        }, duration);
-
-      } else if (effectType === 1) {
-        card.style.transition = 'border-color .15s, box-shadow .15s';
-        card.style.borderColor = '#efa52b';
-        card.style.boxShadow = '0 0 18px #efa52b55, inset 0 0 12px #efa52b10';
-
-        const duration = 500 + Math.random() * 400;
-        setTimeout(() => {
-          card.style.borderColor = '';
-          card.style.boxShadow = '';
-          setTimeout(() => { card.dataset.flickering = '0'; }, 300);
-        }, duration);
-
-      } else {
-        card.style.transition = 'box-shadow .08s, border-color .08s';
-        card.style.borderColor = '#c22b27';
-        card.style.boxShadow = '0 0 22px #c22b2760';
-        setTimeout(() => {
-          card.style.borderColor = '';
-          card.style.boxShadow = '';
+          card.classList.add('js-flash');
           setTimeout(() => {
-            card.style.borderColor = '#c22b27';
-            card.style.boxShadow = '0 0 22px #c22b2760';
-            setTimeout(() => {
-              card.style.borderColor = '';
-              card.style.boxShadow = '';
-              setTimeout(() => { card.dataset.flickering = '0'; }, 200);
-            }, 120);
-          }, 100);
-        }, 120);
-      }
+            card.classList.add('no-transition');
+            card.classList.remove('js-flash');
+            setTimeout(() => card.classList.remove('no-transition'), 50);
+          }, 1400); // long enough for slow sweep to complete
+        }, i * 80); // slight stagger between the 5 cards
+      });
+      setTimeout(shimmerBatch, 3000);
     }
+    setTimeout(shimmerBatch, 1500);
 
-    function scheduleNext() {
-      const count = 1 + Math.floor(Math.random() * 2);
-      const shuffled = [...cards].sort(() => Math.random() - .5);
-      for (let i = 0; i < count; i++) {
-        const delay = i * (150 + Math.random() * 200);
-        setTimeout(() => flickerCard(shuffled[i]), delay);
-      }
-      const nextIn = 1200 + Math.random() * 2300;
-      setTimeout(scheduleNext, nextIn);
-    }
-
-    setTimeout(scheduleNext, 2000);
   }, 1000);
 })();
 </script>
