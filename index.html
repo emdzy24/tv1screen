@@ -233,7 +233,7 @@
   }
   .card-number {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.898rem;
+    font-size: 1.139rem;
     letter-spacing: .06em;
     color: var(--brand-red);
     opacity: 1;
@@ -243,7 +243,7 @@
   }
   .card-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.898rem;
+    font-size: 1.139rem;
     letter-spacing: .05em;
     color: var(--white);
     line-height: 1.1;
@@ -255,7 +255,7 @@
   }
   .card-price {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.898rem;
+    font-size: 1.139rem;
     letter-spacing: .04em;
     color: var(--brand-yellow);
     white-space: nowrap;
@@ -264,7 +264,7 @@
   }
   .dot {
     color: #ffffff25;
-    font-size: .65rem;
+    font-size: .39rem;
     flex-shrink: 0;
     align-self: center;
   }
@@ -277,7 +277,7 @@
     flex-wrap: wrap;
   }
   .tag {
-    font-size: .651rem;
+    font-size: .391rem;
     letter-spacing: .07em;
     text-transform: uppercase;
     padding: 2px 7px;
@@ -304,7 +304,7 @@
 
   /* ── Row 3: ingredients ── */
   .card-ingredients {
-    font-size: .935rem;
+    font-size: .561rem;
     letter-spacing: .05em;
     text-transform: uppercase;
     color: rgba(255,255,255,0.88);
@@ -523,9 +523,9 @@ pizzas.forEach((p, i) => {
   const ingDisplay = p.n === 2
     ? p.ing.replace(/,\s*/g, ',<br>')
     : p.ing;
-  const nameStyle  = p.n === 2 ? ' style="font-size:1.6rem"' : '';
-  const numStyle   = p.n === 2 ? ' style="font-size:1.6rem"' : '';
-  const priceStyle = p.n === 2 ? ' style="font-size:1.6rem"' : '';
+  const nameStyle  = p.n === 2 ? ' style="font-size:0.96rem"' : '';
+  const numStyle   = p.n === 2 ? ' style="font-size:0.96rem"' : '';
+  const priceStyle = p.n === 2 ? ' style="font-size:0.96rem"' : '';
 
   grid.innerHTML += `
     <div class="card ${gradientClass}">
