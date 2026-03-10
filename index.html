@@ -129,7 +129,7 @@
     background: linear-gradient(145deg, var(--card-bg), var(--card-bg2));
     border: 1px solid #ffffff0d;
     border-radius: 7px;
-    padding: 10px 0 8px 12px;
+    padding: 10px 0 0 12px;
     overflow: hidden;
     transition: transform .28s cubic-bezier(.34,1.56,.64,1), border-color .25s, box-shadow .25s, background .25s;
     animation: fadeUp .5s ease both;
@@ -142,37 +142,17 @@
     border-color: var(--brand-red);
     box-shadow: 0 8px 28px #c22b2740, 0 2px 8px #00000060, inset 0 0 20px #c22b2710;
   }
-  /* left red accent bar — always visible */
+  /* left red accent bar — slowly pulsing */
   .card::after {
     content:''; position:absolute; left:0; top:10%; bottom:10%;
     width:3px;
     background: linear-gradient(180deg, transparent, var(--brand-red), var(--brand-yellow), var(--brand-red), transparent);
-    opacity:1;
     border-radius:0 2px 2px 0;
+    animation: edgePulse 3s ease-in-out infinite;
   }
-
-  /* shimmer sweep */
-  .card::before {
-    content:''; position:absolute;
-    top:0; left:-100%; width:60%; height:100%;
-    background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.07) 50%, transparent 60%);
-    transition: left 1.2s ease;
-    pointer-events: none;
-    z-index: 3;
-  }
-  .card.no-transition::before { transition: none !important; }
-  .card:hover::before { left: 150%; }
-  .card.js-flash::before { left: 150%; }
-
-  /* JS flash — subtle inner glow only, no transform */
-  .card.js-flash {
-    box-shadow: inset 0 0 30px #c22b2722, inset 0 0 8px #c22b270f;
-    border-color: #c22b2755 !important;
-    transition: box-shadow .2s, border-color .2s !important;
-  }
-  .card-g4.js-flash {
-    box-shadow: inset 0 0 30px #efa52b22, inset 0 0 8px #efa52b0f;
-    border-color: #efa52b55 !important;
+  @keyframes edgePulse {
+    0%,100% { opacity:.4; box-shadow: none; }
+    50%      { opacity:1; box-shadow: 0 0 8px #c22b2799, 0 0 16px #c22b2744; }
   }
 
   /* name brightens on hover */
@@ -218,7 +198,7 @@
     object-fit: cover;
     opacity: 1;
     pointer-events: none;
-    filter: saturate(1.5) brightness(1.15);
+    filter: saturate(1.1) brightness(0.88);
     mask-image: linear-gradient(to right, transparent 0%, black 4%);
     -webkit-mask-image: linear-gradient(to right, transparent 0%, black 4%);
   }
@@ -233,7 +213,7 @@
   }
   .card-number {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.139rem;
+    font-size: 1.898rem;
     letter-spacing: .06em;
     color: var(--brand-red);
     opacity: 1;
@@ -243,7 +223,7 @@
   }
   .card-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.139rem;
+    font-size: 1.898rem;
     letter-spacing: .05em;
     color: var(--white);
     line-height: 1.1;
@@ -255,7 +235,7 @@
   }
   .card-price {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.139rem;
+    font-size: 1.898rem;
     letter-spacing: .04em;
     color: var(--brand-yellow);
     white-space: nowrap;
@@ -264,7 +244,7 @@
   }
   .dot {
     color: #ffffff25;
-    font-size: .39rem;
+    font-size: .65rem;
     flex-shrink: 0;
     align-self: center;
   }
@@ -277,7 +257,7 @@
     flex-wrap: wrap;
   }
   .tag {
-    font-size: .391rem;
+    font-size: .651rem;
     letter-spacing: .07em;
     text-transform: uppercase;
     padding: 2px 7px;
@@ -304,7 +284,7 @@
 
   /* ── Row 3: ingredients ── */
   .card-ingredients {
-    font-size: .561rem;
+    font-size: .935rem;
     letter-spacing: .05em;
     text-transform: uppercase;
     color: rgba(255,255,255,0.88);
@@ -478,31 +458,31 @@ animSparks();
    PIZZA CARDS
 ═══════════════════════════════ */
 const pizzas=[
-  {n:1,  name:"Margarita",        price:"8.9€",  ing:"Tomate, Mozzarella",                                                                                    tags:["veg"],      photo:null},
-  {n:2,  name:"Margarita Búfala", price:"10.5€", ing:"Tomate,\u00A0Mozzarella\u00A0de\u00A0Búfala, Albahaca",                                                 tags:["veg"],      photo:"https://lh3.googleusercontent.com/d/1QgtP6tMFS_ABq0IgsyfuPUH76xCF6C6b"},
+  {n:1,  name:"Margarita",        price:"8.9€",  ing:"Tomate, Mozzarella",                                                                                    tags:["veg"],      photo:"https://lh3.googleusercontent.com/d/1OqEAG4vXF5py93fM3lnhpOSQ3nvOLdD2"},
+  {n:2,  name:"Margarita Búfala", price:"10.5€", ing:"Tomate,\u00A0Mozzarella\u00A0de\u00A0Búfala, Albahaca",                                                 tags:["veg"],      photo:"https://lh3.googleusercontent.com/d/1fc3T4F9tRzxbTIW76Sv8ONJn96a_LOsn"},
   {n:3,  name:"Peperoni",         price:"9.9€",  ing:"Tomate, Mozzarella, Peperoni",                                                                          tags:[],           photo:"https://lh3.googleusercontent.com/d/1kJT15AHa4zjina1fj1sGlZih7XgcJ57I"},
-  {n:4,  name:"Prosciutto",       price:"9.9€",  ing:"Tomate, Mozzarella, Jamón\u00A0Cocido",                                                                 tags:[],           photo:null},
-  {n:5,  name:"Carbonara",        price:"10.9€", ing:"Nata, Huevo, Bacon, Cebolla",                                                                           tags:[],           photo:null},
-  {n:6,  name:"Barbacoa",         price:"12.9€", ing:"Tomate, Mozzarella, Pollo, Bacon, Champiñones, Salsa\u00A0Barbacoa",                                    tags:[],           photo:null},
-  {n:7,  name:"4 Quesos",         price:"11.9€", ing:"Tomate, Mozzarella, Queso\u00A0de\u00A0Cabra, Queso\u00A0Azul, Parmesano",                              tags:["veg"],      photo:null},
-  {n:8,  name:"Pollo al Ajo",     price:"11.9€", ing:"Tomate, Mozzarella, Pollo\u00A0al\u00A0Ajo, Chili\u00A0Fresco, Alioli",                                 tags:["hot"],      photo:null},
-  {n:9,  name:"Bella Napoli",     price:"12.5€", ing:"Tomate, Mozzarella, Jamón\u00A0Serrano, Tomates\u00A0Cherry, Rúcula, Parmesano",                        tags:[],           photo:null},
-  {n:10, name:"Hawaiana",         price:"10.5€", ing:"Tomate, Mozzarella, Jamón\u00A0Cocido, Piña",                                                           tags:[],           photo:null},
-  {n:11, name:"4 Carnes",         price:"13.9€", ing:"Tomate, Mozzarella, Carne\u00A0Picada, Pollo, Peperoni, Jamón\u00A0Cocido",                             tags:[],           photo:null},
-  {n:12, name:"Vegetariana",      price:"11.9€", ing:"Tomate, Mozzarella, Cebolla, Maíz, Pimiento, Champiñones",                                              tags:["veg"],      photo:null},
-  {n:13, name:"Primavera",        price:"11.9€", ing:"Tomate, Mozzarella, Queso\u00A0de\u00A0Cabra, Aceitunas\u00A0Negras, Rúcula",                           tags:["veg"],      photo:null},
-  {n:14, name:"Capri",          price:"11.9€", ing:"Tomate, Mozzarella, Jamón Cocido, Champiñones, Aceitunas Negras",             tags:[],           photo:"https://lh3.googleusercontent.com/d/1KBZ4x3S26ZnKhG7ND43Qw-x2NNCNdaGw"},
-  {n:15, name:"César",            price:"12.5€", ing:"Nata, Mozzarella, Pollo, Rúcula, Parmesano, Salsa\u00A0César",                                         tags:[],           photo:"https://lh3.googleusercontent.com/d/1QKOo9Qaf-oPiEhlRMFi5apyBGJFHT-rm"},
-  {n:16, name:"Mexicana",         price:"12.9€", ing:"Tomate, Mozzarella, Carne\u00A0Picada, Pollo, Cebolla, Jalapeños, Salsa\u00A0Picante",                  tags:["hot"],      photo:"https://lh3.googleusercontent.com/d/1P3ldJcXXMmKKBXojKGXF4thieyiviYJq"},
-  {n:17, name:"Atún",             price:"10.9€", ing:"Tomate, Mozzarella, Atún, Cebolla, Maíz",                                                               tags:["sea"],      photo:null},
-  {n:18, name:"Marinera",         price:"14.5€", ing:"Tomate, Mozzarella, Atún, Mejillones, Gambas, Calamares",                                               tags:["sea"],      photo:null},
-  {n:19, name:"Diavola",          price:"13.5€", ing:"Tomate, Mozzarella, Peperoni, Carne\u00A0Picada, Cebolla, Pimiento, Jalapeños",                         tags:["hot"],      photo:null},
-  {n:20, name:"Gourmet",          price:"13.5€", ing:"Tomate, Mozzarella, Pollo, Queso\u00A0de\u00A0Cabra, Cebolla\u00A0Caramelizada",                        tags:[],           photo:null},
-  {n:21, name:"Bianca",           price:"11.5€", ing:"Nata, Mozzarella, Jamón\u00A0Cocido, Cebolla, Champiñones",                                             tags:[],           photo:null},
-  {n:22, name:"Gambas Pil-Pil",   price:"11.5€", ing:"Tomate, Mozzarella, Gambas, Cebolla, Chili\u00A0Fresco",                                                tags:["sea","hot"], photo:null},
+  {n:4,  name:"Prosciutto",       price:"9.9€",  ing:"Tomate, Mozzarella, Jamón\u00A0Cocido",                                                                 tags:[],           photo:"https://lh3.googleusercontent.com/d/1cfxxghY9UmZG5GzPffNv1sZ3m7TV0AI0"},
+  {n:5,  name:"Carbonara",        price:"10.9€", ing:"Nata, Huevo, Bacon, Cebolla",                                                                           tags:[],           photo:"https://lh3.googleusercontent.com/d/1WqJeal9g5Z83j0ez4cfA9QhJ7E645o8P"},
+  {n:6,  name:"Barbacoa",         price:"12.9€", ing:"Tomate, Mozzarella, Pollo, Bacon, Champiñones, Salsa\u00A0Barbacoa",                                    tags:[],           photo:"https://lh3.googleusercontent.com/d/1K_P-cwIpbDxXg6zTsJIdghb9os4QfKpc"},
+  {n:7,  name:"4 Quesos",         price:"11.9€", ing:"Tomate, Mozzarella, Queso\u00A0de\u00A0Cabra, Queso\u00A0Azul, Parmesano",                              tags:["veg"],      photo:"https://lh3.googleusercontent.com/d/1il_XUO2zVnTxLaZMPzZZvWzs6kMfrNIw"},
+  {n:8,  name:"Pollo al Ajo",     price:"11.9€", ing:"Tomate, Mozzarella, Pollo\u00A0al\u00A0Ajo, Chili\u00A0Fresco, Alioli",                                 tags:["hot"],      photo:"https://lh3.googleusercontent.com/d/19vFS9_pVqZlt9uLQvJeLCEWA8SWUMYxC"},
+  {n:9,  name:"Bella Napoli",     price:"12.5€", ing:"Tomate, Mozzarella, Jamón\u00A0Serrano, Tomates\u00A0Cherry, Rúcula, Parmesano",                        tags:[],           photo:"https://lh3.googleusercontent.com/d/1kHdUNp0tOAK6_P32ZON26ZLA26Kuabvj"},
+  {n:10, name:"Hawaiana",         price:"10.5€", ing:"Tomate, Mozzarella, Jamón\u00A0Cocido, Piña",                                                           tags:[],           photo:"https://lh3.googleusercontent.com/d/1nec_0yl21vTGr0ulYo98GDl3jPoelyKj"},
+  {n:11, name:"4 Carnes",         price:"13.9€", ing:"Tomate, Mozzarella, Carne\u00A0Picada, Pollo, Peperoni, Jamón\u00A0Cocido",                             tags:[],           photo:"https://lh3.googleusercontent.com/d/11RQ6EClKzeAOsMxd5QkDU5RQIJomDYBy"},
+  {n:12, name:"Vegetariana",      price:"11.9€", ing:"Tomate, Mozzarella, Cebolla, Maíz, Pimiento,\u00A0Champiñones",                                              tags:["veg"],      photo:"https://lh3.googleusercontent.com/d/1VigtxJEEorxTUx0sQk-uPp_deNclVWxT"},
+  {n:13, name:"Primavera",        price:"11.9€", ing:"Tomate, Mozzarella, Queso\u00A0de\u00A0Cabra, Aceitunas\u00A0Negras, Rúcula",                           tags:["veg"],      photo:"https://lh3.googleusercontent.com/d/1QSgngOTerjRbjHcQYnPNXSoIpSdM6QPE"},
+  {n:14, name:"Capri",          price:"11.9€", ing:"Tomate, Mozzarella, Jamón Cocido, Champiñones, Aceitunas Negras",             tags:[],           photo:"https://lh3.googleusercontent.com/d/1Z6D5ybeOodaXiC1dX9lvnCKY9UJ8GfsC"},
+  {n:15, name:"César",            price:"12.5€", ing:"Nata, Mozzarella, Pollo, Rúcula, Parmesano, Salsa\u00A0César",                                         tags:[],           photo:"https://lh3.googleusercontent.com/d/1uJHfqJ8pjHWw-rHB9dswKF-jQ7jx-sJW"},
+  {n:16, name:"Mexicana",         price:"12.9€", ing:"Tomate, Mozzarella, Carne\u00A0Picada, Pollo, Cebolla, Jalapeños, Salsa\u00A0Picante",                  tags:["hot"],      photo:"https://lh3.googleusercontent.com/d/13oGcq5O8lEszt4gK2ikk8mowu-LNs8DO"},
+  {n:17, name:"Atún",             price:"10.9€", ing:"Tomate, Mozzarella, Atún, Cebolla, Maíz",                                                               tags:["sea"],      photo:"https://lh3.googleusercontent.com/d/1rbjOJNZdVH5Ch4fwu48exNep8aCiTot4"},
+  {n:18, name:"Marinera",         price:"14.5€", ing:"Tomate, Mozzarella, Atún, Mejillones, Gambas, Calamares",                                               tags:["sea"],      photo:"https://lh3.googleusercontent.com/d/1-u17QmlNtE7j1Y9RrNMgM9d-iOGpO1q4"},
+  {n:19, name:"Diavola",          price:"13.5€", ing:"Tomate, Mozzarella, Peperoni,\u00A0Carne\u00A0Picada, Cebolla, Pimiento, Jalapeños",                         tags:["hot"],      photo:"https://lh3.googleusercontent.com/d/1gP_alRXgLl1V74okRCzIoDjHpm3qqFo7"},
+  {n:20, name:"Gourmet",          price:"13.5€", ing:"Tomate,\u00A0Mozzarella, Pollo, Queso\u00A0de\u00A0Cabra, Cebolla\u00A0Caramelizada",                        tags:[],           photo:"https://lh3.googleusercontent.com/d/1NWwZWHyxo5G9LDZCnzNt_slLxR_QgQzs"},
+  {n:21, name:"Bianca",           price:"11.5€", ing:"Nata,\u00A0Mozzarella, Jam\u00F3n\u00A0Cocido, Cebolla, Champi\u00F1ones",                                             tags:[],           photo:"https://lh3.googleusercontent.com/d/1CZXXIkE6wVtzzOOzulIssCufKBp0VDGl"},
+  {n:22, name:"Gambas Pil-Pil",   price:"11.5€", ing:"Tomate, Mozzarella, Gambas, Cebolla, Chili\u00A0Fresco",                                                tags:["sea","hot"], photo:"https://lh3.googleusercontent.com/d/1H5xp-CqkDNQ1kWD7mAhg0XdBriYGYp_q"},
   {n:23, name:"Burratina",        price:"14.5€", ing:"Pesto, Mozzarella, Burrata, Mortadela, Rúcula, Pistachos",                                              tags:[],           photo:"https://lh3.googleusercontent.com/d/1l1_y7Ob55Fhav872wgl3BtHd4wu5Nyt3"},
-  {n:24, name:"4 Stagioni",       price:"12.9€", ing:"Tomate, Mozzarella, Peperoni, Jamón\u00A0Cocido, Aceitunas\u00A0Negras, Champiñones",                   tags:[],           photo:null},
-  {n:25, name:"Boloñesa",         price:"11.9€", ing:"Nata, Mozzarella, Salsa\u00A0Boloñesa, Carne\u00A0Picada",                                              tags:[],           photo:null}
+  {n:24, name:"4 Stagioni",       price:"12.9€", ing:"Tomate, Mozzarella, Peperoni, Jamón\u00A0Cocido, Aceitunas\u00A0Negras, Champiñones",                   tags:[],           photo:"https://lh3.googleusercontent.com/d/1gkFUWujWGk-dYvk8o03KS2UQTyGBUeWQ"},
+  {n:25, name:"Boloñesa",         price:"11.9€", ing:"Nata, Mozzarella, Salsa\u00A0Boloñesa, Carne\u00A0Picada",                                              tags:[],           photo:"https://lh3.googleusercontent.com/d/1FG4PW0S5CUzxsIzfM-Y2CTcX6K60ImLa"}
 ];
 
 const tagMap = {
@@ -522,10 +502,18 @@ pizzas.forEach((p, i) => {
   const rowStyle = (p.n === 2 || p.n === 22) ? ' style="width:108%;max-width:108%"' : '';
   const ingDisplay = p.n === 2
     ? p.ing.replace(/,\s*/g, ',<br>')
+    : p.n === 12
+    ? 'Tomate, Mozzarella, Cebolla, Maíz, Pimiento,<br>Champiñones'
+    : p.n === 19
+    ? 'Tomate, Mozzarella,<br>Carne Picada,<br>Peperoni, Cebolla,<br>Pimiento, Jalapeños'
+    : p.n === 20
+    ? 'Tomate, Mozzarella,<br>Pollo,<br>Queso de Cabra,<br>Cebolla Caramelizada'
+    : p.n === 21
+    ? 'Nata, Mozzarella,<br>Jamón Cocido,<br>Cebolla,<br>Champiñones'
     : p.ing;
-  const nameStyle  = p.n === 2 ? ' style="font-size:0.96rem"' : '';
-  const numStyle   = p.n === 2 ? ' style="font-size:0.96rem"' : '';
-  const priceStyle = p.n === 2 ? ' style="font-size:0.96rem"' : '';
+  const nameStyle  = p.n === 2 ? ' style="font-size:1.6rem"' : '';
+  const numStyle   = p.n === 2 ? ' style="font-size:1.6rem"' : '';
+  const priceStyle = p.n === 2 ? ' style="font-size:1.6rem"' : '';
 
   grid.innerHTML += `
     <div class="card ${gradientClass}">
@@ -584,11 +572,10 @@ window.addEventListener('beforeunload', e => {
 <script>
 /* ═══════════════════════════════
    CARD ANIMATIONS
-   All numbers pulse in sync (CSS)
-   Subtle inner flash randomly
+   Numbers pulse in sync (CSS)
+   Left edge bar pulses (CSS)
 ═══════════════════════════════ */
 (function() {
-  // Inject number pulse keyframe once
   const st = document.createElement('style');
   st.textContent = `
     @keyframes numPulse {
@@ -598,34 +585,6 @@ window.addEventListener('beforeunload', e => {
     .card-number { animation: numPulse 3s ease-in-out infinite; }
   `;
   document.head.appendChild(st);
-  setTimeout(() => {
-    const cards = Array.from(document.querySelectorAll('.card'));
-
-    cards.forEach((card, i) => {
-
-
-      // shimmer handled by group scheduler below
-
-    }); // end cards.forEach
-
-    // ── 5 random cards shimmer every 3 seconds ──
-    function shimmerBatch() {
-      const shuffled = [...cards].sort(() => Math.random() - .5).slice(0, 5);
-      shuffled.forEach((card, i) => {
-        setTimeout(() => {
-          card.classList.add('js-flash');
-          setTimeout(() => {
-            card.classList.add('no-transition');
-            card.classList.remove('js-flash');
-            setTimeout(() => card.classList.remove('no-transition'), 50);
-          }, 1400); // long enough for slow sweep to complete
-        }, i * 80); // slight stagger between the 5 cards
-      });
-      setTimeout(shimmerBatch, 3000);
-    }
-    setTimeout(shimmerBatch, 1500);
-
-  }, 1000);
 })();
 </script>
 </body>
